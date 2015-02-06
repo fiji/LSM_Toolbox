@@ -185,7 +185,7 @@ public class InfoFrame extends JFrame {
 					String header = new String(
 							"Time (sec) \tEvent Type \tEvent Description");
 					TextWindow tw = new TextWindow("Time Events for " + imp.getTitle(),
-							header, null, 400, 200);
+							header, (String) null, 400, 200);
 					tw.append(events.Description);
 				} else IJ.error("No events defined in the LSM file.");
 			}
@@ -320,7 +320,8 @@ public class InfoFrame extends JFrame {
 
 	private void dumpInfo() {
 		String header = new String("Parameter\tValue");
-		TextWindow tw = new TextWindow("LSM Infos DUMP", header, null, 280, 450);
+		TextWindow tw = new TextWindow("LSM Infos DUMP",
+			header, (String) null, 280, 450);
 		String[] Parameters = new String[26];
 		Parameters[0] = "File Name";
 		Parameters[1] = "User";
