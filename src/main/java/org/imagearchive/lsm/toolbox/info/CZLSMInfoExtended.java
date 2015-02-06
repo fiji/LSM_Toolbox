@@ -1,9 +1,10 @@
+
 package org.imagearchive.lsm.toolbox.info;
 
 import org.imagearchive.lsm.reader.info.CZLSMInfo;
 import org.imagearchive.lsm.toolbox.info.scaninfo.ScanInfo;
 
-public class CZLSMInfoExtended extends CZLSMInfo{
+public class CZLSMInfoExtended extends CZLSMInfo {
 
 	public long MagicNumber = 0;
 
@@ -77,39 +78,41 @@ public class CZLSMInfoExtended extends CZLSMInfo{
 
 	public ScanInfo scanInfo;
 
+	@Override
 	public String toString() {
-		return new String("DimensionX:  " + DimensionX + "\n" +
-				"DimensionY:  "+ DimensionY + "\n" +
-				"DimensionZ:  " + DimensionZ + "\n"+
-				"DimensionChannels:  " + DimensionChannels + "\n"+
-				"ScanType:  " + getScanTypeText(ScanType)+"("+ScanType + ")\n" + "DataType:  " + DataType);
+		return new String("DimensionX:  " + DimensionX + "\n" + "DimensionY:  " +
+			DimensionY + "\n" + "DimensionZ:  " + DimensionZ + "\n" +
+			"DimensionChannels:  " + DimensionChannels + "\n" + "ScanType:  " +
+			getScanTypeText(ScanType) + "(" + ScanType + ")\n" + "DataType:  " +
+			DataType);
 	}
-	public String getScanTypeText(int scanType) {
+
+	public String getScanTypeText(final int scanType) {
 		switch (scanType) {
-		case 0:
-			return "normal x-y-z-scan";
-		case 1:
-			return "z-Scan (x-z-plane)";
-		case 2:
-			return "line scan";
-		case 3:
-			return "time series x-y";
-		case 4:
-			return "time series x-z (release 2.0  or later)";
-		case 5:
-			return "time series ?Mean of ROIs?";
-		case 6:
-			return "time series x-y-z";
-		case 7:
-			return "spline scan";
-		case 8:
-			return "spline plane x-z";
-		case 9:
-			return "time series spline plane x-z";
-		case 10:
-			return "point mode";
-		default:
-			return "normal x-y-z-scan";
+			case 0:
+				return "normal x-y-z-scan";
+			case 1:
+				return "z-Scan (x-z-plane)";
+			case 2:
+				return "line scan";
+			case 3:
+				return "time series x-y";
+			case 4:
+				return "time series x-z (release 2.0  or later)";
+			case 5:
+				return "time series ?Mean of ROIs?";
+			case 6:
+				return "time series x-y-z";
+			case 7:
+				return "spline scan";
+			case 8:
+				return "spline plane x-z";
+			case 9:
+				return "time series spline plane x-z";
+			case 10:
+				return "point mode";
+			default:
+				return "normal x-y-z-scan";
 		}
 	}
 }

@@ -1,3 +1,4 @@
+
 package org.imagearchive.lsm.toolbox.gui;
 
 import java.awt.BorderLayout;
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.text.html.HTMLEditorKit;
 
 import org.imagearchive.lsm.toolbox.MasterModel;
@@ -48,23 +50,23 @@ public class AboutDialog extends JDialog {
 
 	private JButton okButton;
 
-	private Dimension ScreenDimension = Toolkit.getDefaultToolkit()
-			.getScreenSize();
+	private final Dimension ScreenDimension = Toolkit.getDefaultToolkit()
+		.getScreenSize();
 
-	private int ScreenX = (int) ScreenDimension.getWidth();
+	private final int ScreenX = (int) ScreenDimension.getWidth();
 
-	private int ScreenY = (int) ScreenDimension.getHeight();
+	private final int ScreenY = (int) ScreenDimension.getHeight();
 
 	private JLabel infoTitle;
 
-	private String infoText = "<html><center>LSM_Toolbox ver "
-			+ MasterModel.VERSION
-			+ " (C) 2003-2009 Patrick Pirrotte </center></html>";
+	private final String infoText = "<html><center>LSM_Toolbox ver " +
+		MasterModel.VERSION + " (C) 2003-2009 Patrick Pirrotte </center></html>";
 
-	//private HtmlPageLoader loader;
+	// private HtmlPageLoader loader;
 
-	public AboutDialog(JFrame parent, MasterModel masterModel)
-			throws HeadlessException {
+	public AboutDialog(final JFrame parent, final MasterModel masterModel)
+		throws HeadlessException
+	{
 		super(parent, true);
 		this.masterModel = masterModel;
 		initializeGUI();
@@ -78,8 +80,8 @@ public class AboutDialog extends JDialog {
 	public void initializeGUI() {
 		setTitle("About");
 		tabber = new javax.swing.JTabbedPane();
-		okButton = new JButton(new ImageIcon(getClass().getResource(
-				"images/ok.png")));
+		okButton =
+			new JButton(new ImageIcon(getClass().getResource("images/ok.png")));
 		aboutScroller = new JScrollPane();
 		changelogScroller = new JScrollPane();
 		about = new JEditorPane();
@@ -92,7 +94,9 @@ public class AboutDialog extends JDialog {
 		iconsetScroller = new JScrollPane();
 		infoTitle = new JLabel();
 		addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(java.awt.event.WindowEvent evt) {
+
+			@Override
+			public void windowClosing(final java.awt.event.WindowEvent evt) {
 				dispose();
 			}
 		});
@@ -111,7 +115,7 @@ public class AboutDialog extends JDialog {
 		tabber.addTab("LSM_Toolbox Licence", licenseScroller);
 		tabber.addTab("Nuvola Iconset License", iconsetScroller);
 
-		String loadingText = "Loading... please wait...";
+		final String loadingText = "Loading... please wait...";
 		about.setText(loadingText);
 		changelog.setText(loadingText);
 		help.setText(loadingText);
@@ -130,13 +134,15 @@ public class AboutDialog extends JDialog {
 		help.setEditable(false);
 
 		infoTitle.setBorder(BorderFactory.createEtchedBorder());
-		infoTitle.setHorizontalAlignment(JLabel.CENTER);
+		infoTitle.setHorizontalAlignment(SwingConstants.CENTER);
 
 		getContentPane().add(infoTitle, BorderLayout.NORTH);
 		getContentPane().add(tabber, BorderLayout.CENTER);
 		getContentPane().add(okButton, BorderLayout.SOUTH);
 		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				dispose();
 			}
 		});
@@ -145,20 +151,23 @@ public class AboutDialog extends JDialog {
 	}
 
 	public void loadPages() {
-		Object[][] pages = new Object[][]{{about,"html/about.htm"},{changelog,"html/changelog.htm"},{iconset,"html/lgpl.txt"},{license,"html/licence.txt"},{help,"html/help.htm"}};
-		HtmlPageLoader loader = new HtmlPageLoader(this, pages);
+		final Object[][] pages =
+			new Object[][] { { about, "html/about.htm" },
+				{ changelog, "html/changelog.htm" }, { iconset, "html/lgpl.txt" },
+				{ license, "html/licence.txt" }, { help, "html/help.htm" } };
+		final HtmlPageLoader loader = new HtmlPageLoader(this, pages);
 		loader.start();
 
 	}
 
 	public void centerWindow() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation((screenSize.width - this.getWidth()) / 2,
-				(screenSize.height - this.getHeight()) / 2);
+			(screenSize.height - this.getHeight()) / 2);
 	}
 
-	public static void main(String[] args) {
-		new AboutDialog(new JFrame(),null).setVisible(true);
+	public static void main(final String[] args) {
+		new AboutDialog(new JFrame(), null).setVisible(true);
 		System.exit(-1);
 	}
 }

@@ -1,3 +1,4 @@
+
 package org.imagearchive.lsm.toolbox.gui;
 
 import ij.IJ;
@@ -13,61 +14,58 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
 
-import org.imagearchive.lsm.reader.info.LSMFileInfo;
-import org.imagearchive.lsm.toolbox.MasterModel;
 import org.imagearchive.lsm.toolbox.Reader;
 import org.imagearchive.lsm.toolbox.ServiceMediator;
 
 /*     Requires Java 2, v1.3.1. Based on the Drag_And_Drop plugin by Eric Kischell (keesh@ieee.org). */
 public class CPDragAndDrop implements DropTargetListener {
+
 	protected static ImageJ ij = null; // the "ImageJ" frame
 	private static boolean enableDND = true;
 	protected DataFlavor dFlavor;
 	private ControlPanelFrame cp;
 
-	public CPDragAndDrop(ControlPanelFrame cp) {
-		String vers = System.getProperty("java.version");
-		if (vers.compareTo("1.3.1") < 0)
-			return;
+	public CPDragAndDrop(final ControlPanelFrame cp) {
+		final String vers = System.getProperty("java.version");
+		if (vers.compareTo("1.3.1") < 0) return;
 
 		this.cp = cp;
 		/*
 		 * ij = IJ.getInstance(); ij.setDropTarget(null);
 		 */
-		DropTarget dropTarget = new DropTarget(cp, this);
+		final DropTarget dropTarget = new DropTarget(cp, this);
 	}
 
-	public void drop(DropTargetDropEvent dtde) {
+	@Override
+	public void drop(final DropTargetDropEvent dtde) {
 		dtde.acceptDrop(DnDConstants.ACTION_COPY);
 		try {
-			Transferable t = dtde.getTransferable();
+			final Transferable t = dtde.getTransferable();
 			if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-				Object data = t.getTransferData(DataFlavor.javaFileListFlavor);
-				Iterator iterator = ((List) data).iterator();
+				final Object data = t.getTransferData(DataFlavor.javaFileListFlavor);
+				final Iterator iterator = ((List) data).iterator();
 				// IJ.log("drop");
 				while (iterator.hasNext()) {
 					final File file = (File) iterator.next();
 					// IJ.log("dopen: "+file.getAbsolutePath());
 					final Reader reader = ServiceMediator.getReader();
 					SwingUtilities.invokeLater(new Runnable() {
+
 						ImageWindow iwc = null;
 
+						@Override
 						public void run() {
 							try {
 								IJ.showStatus("Loading image");
-								ImagePlus imp = reader.open(file
-										.getAbsolutePath(), true);
+								final ImagePlus imp = reader.open(file.getAbsolutePath(), true);
 								IJ.showStatus("Image loaded");
-								if (imp == null)
-									return;
+								if (imp == null) return;
 								imp.setPosition(1, 1, 1);
 								imp.show();
 								/*iwc = imp.getWindow();
@@ -88,7 +86,8 @@ public class CPDragAndDrop implements DropTargetListener {
 								cp.setLSMinfoText(masterModel.getInfo());
 								cp.infoFrame.updateInfoFrame(masterModel
 										.getInfo());*/
-							} catch (OutOfMemoryError e) {
+							}
+							catch (final OutOfMemoryError e) {
 								IJ.outOfMemory("Could not load lsm image.");
 							}
 						}
@@ -96,23 +95,25 @@ public class CPDragAndDrop implements DropTargetListener {
 					});
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch (final Exception e) {
 			dtde.dropComplete(false);
 			return;
 		}
 		dtde.dropComplete(true);
 	}
 
-	public void dragEnter(DropTargetDragEvent dtde) {
+	@Override
+	public void dragEnter(final DropTargetDragEvent dtde) {
 		dtde.acceptDrag(DnDConstants.ACTION_COPY);
 	}
 
-	public void dragOver(DropTargetDragEvent e) {
-	}
+	@Override
+	public void dragOver(final DropTargetDragEvent e) {}
 
-	public void dragExit(DropTargetEvent e) {
-	}
+	@Override
+	public void dragExit(final DropTargetEvent e) {}
 
-	public void dropActionChanged(DropTargetDragEvent e) {
-	}
+	@Override
+	public void dropActionChanged(final DropTargetDragEvent e) {}
 }

@@ -1,3 +1,4 @@
+
 package org.imagearchive.lsm.toolbox;
 
 import org.imagearchive.lsm.toolbox.gui.ControlPanelFrame;
@@ -6,7 +7,7 @@ import org.imagearchive.lsm.toolbox.gui.InfoFrame;
 
 public class ServiceMediator {
 
-	//private static MasterModel masterModel;
+	// private static MasterModel masterModel;
 
 	private static ControlPanelFrame controlPanelFrame;
 
@@ -24,19 +25,21 @@ public class ServiceMediator {
 		ServiceMediator.masterModel = masterModel;
 	}*/
 
-	public static void registerReader(Reader reader) {
+	public static void registerReader(final Reader reader) {
 		ServiceMediator.reader = reader;
 	}
 
-	public static void registerControlPanelFrame(ControlPanelFrame controlPanelFrame) {
+	public static void registerControlPanelFrame(
+		final ControlPanelFrame controlPanelFrame)
+	{
 		ServiceMediator.controlPanelFrame = controlPanelFrame;
 	}
 
-	public static void registerInfoFrame(InfoFrame infoFrame) {
+	public static void registerInfoFrame(final InfoFrame infoFrame) {
 		ServiceMediator.infoFrame = infoFrame;
 	}
 
-	public static void registerDetailsFrame(DetailsFrame detailsFrame) {
+	public static void registerDetailsFrame(final DetailsFrame detailsFrame) {
 		ServiceMediator.detailsFrame = detailsFrame;
 	}
 

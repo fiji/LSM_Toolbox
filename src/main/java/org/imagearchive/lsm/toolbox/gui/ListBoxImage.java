@@ -1,3 +1,4 @@
+
 package org.imagearchive.lsm.toolbox.gui;
 
 import org.imagearchive.lsm.reader.info.LSMFileInfo;
@@ -14,12 +15,15 @@ public class ListBoxImage {
 
 	public LSMFileInfo lsmFi;
 
-	public ListBoxImage(String title, LSMFileInfo lsmFi ,int imageIndex) {
+	public ListBoxImage(final String title, final LSMFileInfo lsmFi,
+		final int imageIndex)
+	{
 		this.title = title;
 		this.lsmFi = lsmFi;
 		this.imageIndex = imageIndex;
 	}
 
+	@Override
 	public String toString() {
 		return title;
 	}

@@ -1,7 +1,5 @@
+
 package org.imagearchive.lsm.toolbox.info;
-
-import org.imagearchive.lsm.toolbox.info.Event;
-
 
 public class EventList {
 
@@ -11,5 +9,5 @@ public class EventList {
 
 	public Event[] events;
 
-    public String Description = "";
+	public String Description = "";
 }

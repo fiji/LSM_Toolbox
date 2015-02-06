@@ -1,3 +1,4 @@
+
 package org.imagearchive.lsm.toolbox.gui;
 
 import java.util.Iterator;
@@ -7,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 
 class TreeTableModel extends AbstractTableModel {
 
-	private String[] columnNames = { "Tag", "Property" };
+	private final String[] columnNames = { "Tag", "Property" };
 
 	private LinkedHashMap<String, Object> dataMap = null;
 
@@ -15,37 +16,41 @@ class TreeTableModel extends AbstractTableModel {
 
 	private boolean filtered = false;
 
-	public TreeTableModel(LinkedHashMap<String, Object> dataMap) {
+	public TreeTableModel(final LinkedHashMap<String, Object> dataMap) {
 		this.dataMap = dataMap;
 		setData(dataMap);
 	}
 
-	public TreeTableModel() {
-	}
+	public TreeTableModel() {}
 
-	public String getColumnName(int col) {
+	@Override
+	public String getColumnName(final int col) {
 		return columnNames[col].toString();
 	}
 
+	@Override
 	public int getRowCount() {
-		if (data == null)
-			return 0;
+		if (data == null) return 0;
 		return data.length;
 	}
 
+	@Override
 	public int getColumnCount() {
 		return 2;
 	}
 
-	public Object getValueAt(int row, int col) {
+	@Override
+	public Object getValueAt(final int row, final int col) {
 		return data[row][col];
 	}
 
-	public boolean isCellEditable(int row, int col) {
+	@Override
+	public boolean isCellEditable(final int row, final int col) {
 		return false;
 	}
 
-	public void setValueAt(Object value, int row, int col) {
+	@Override
+	public void setValueAt(final Object value, final int row, final int col) {
 		data[row][col] = value;
 		fireTableCellUpdated(row, col);
 	}
@@ -53,33 +58,36 @@ class TreeTableModel extends AbstractTableModel {
 	public void setData(LinkedHashMap<String, Object> dataMap) {
 		if (dataMap != null) {
 			if (filtered) dataMap = getFilteredMap(dataMap);
-			Iterator<String> iterator = dataMap.keySet().iterator();
+			final Iterator<String> iterator = dataMap.keySet().iterator();
 			String tag;
 			data = new Object[dataMap.size()][2];
 			for (int i = 0; iterator.hasNext(); i++) {
-				tag = (String) iterator.next();
+				tag = iterator.next();
 				data[i][0] = tag;
 				data[i][1] = dataMap.get(tag);
 			}
-		} else
-			data = null;
+		}
+		else data = null;
 		fireTableDataChanged();
 	}
 
-	public LinkedHashMap<String, Object> getFilteredMap(LinkedHashMap<String, Object> dataMap) {
-		LinkedHashMap<String, Object> filteredMap = new LinkedHashMap<String, Object>();
-		Iterator<String> iterator = dataMap.keySet().iterator();
+	public LinkedHashMap<String, Object> getFilteredMap(
+		final LinkedHashMap<String, Object> dataMap)
+	{
+		final LinkedHashMap<String, Object> filteredMap =
+			new LinkedHashMap<String, Object>();
+		final Iterator<String> iterator = dataMap.keySet().iterator();
 		String tag;
 		data = new Object[dataMap.size()][2];
 		for (int i = 0; iterator.hasNext(); i++) {
-			tag = (String) iterator.next();
-			if (tag.indexOf("<UNKNOWN@") == -1)
-				filteredMap.put(tag,dataMap.get(tag));
+			tag = iterator.next();
+			if (tag.indexOf("<UNKNOWN@") == -1) filteredMap
+				.put(tag, dataMap.get(tag));
 		}
 		return filteredMap;
 	}
 
-	public void setFiltered(boolean filtered) {
+	public void setFiltered(final boolean filtered) {
 		this.filtered = filtered;
 	}
 

@@ -1,3 +1,4 @@
+
 package org.imagearchive.lsm.toolbox.info;
 
 public class TimeStamps {
@@ -10,5 +11,5 @@ public class TimeStamps {
 
 	public double FirstTimeStamp = 0;
 
-    public double[] TimeStamps; //calculated Stamps[n+1] - lsm_fi.TS_STAMPS[n]
+	public double[] TimeStamps; // calculated Stamps[n+1] - lsm_fi.TS_STAMPS[n]
 }

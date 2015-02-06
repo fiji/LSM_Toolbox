@@ -1,3 +1,4 @@
+
 package org.imagearchive.lsm.toolbox.info;
 
 public class ChannelWavelengthRange {
@@ -8,6 +9,6 @@ public class ChannelWavelengthRange {
 
 	public double[] EndWavelength;
 
-    public double[] LambdaStamps; //calculated: (StartWavelength+EndWavelength)/2
+	public double[] LambdaStamps; // calculated: (StartWavelength+EndWavelength)/2
 
 }

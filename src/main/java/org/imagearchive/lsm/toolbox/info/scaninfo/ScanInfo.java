@@ -1,3 +1,4 @@
+
 package org.imagearchive.lsm.toolbox.info.scaninfo;
 
 import java.util.ArrayList;

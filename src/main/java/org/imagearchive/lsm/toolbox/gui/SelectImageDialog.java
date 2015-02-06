@@ -1,3 +1,4 @@
+
 package org.imagearchive.lsm.toolbox.gui;
 
 import ij.WindowManager;
@@ -33,7 +34,7 @@ public class SelectImageDialog extends JDialog {
 
 	private JList imageList;
 
-	private MasterModel masterModel = MasterModel.getMasterModel();
+	private final MasterModel masterModel = MasterModel.getMasterModel();
 
 	private Vector<ListBoxImage> fileInfos;
 
@@ -55,7 +56,9 @@ public class SelectImageDialog extends JDialog {
 
 	private boolean channel = false;
 
-	public SelectImageDialog(JFrame parent, String label, boolean channel, byte filter) {
+	public SelectImageDialog(final JFrame parent, final String label,
+		final boolean channel, final byte filter)
+	{
 		super(parent, true);
 		this.label = label;
 		this.channel = channel;
@@ -63,7 +66,9 @@ public class SelectImageDialog extends JDialog {
 		fillList(filter);
 	}
 
-	public SelectImageDialog(JFrame parent, String label, boolean channel) {
+	public SelectImageDialog(final JFrame parent, final String label,
+		final boolean channel)
+	{
 		super(parent, true);
 		this.label = label;
 		this.channel = channel;
@@ -74,12 +79,13 @@ public class SelectImageDialog extends JDialog {
 	private void initiliazeGUI() {
 		panel = new JPanel();
 		imageList = new JList();
-		okButton = new JButton("OK", new ImageIcon(getClass().getResource(
-				"images/ok.png")));
-		cancelButton = new JButton("Cancel", new ImageIcon(getClass()
-				.getResource("images/cancel.png")));
+		okButton =
+			new JButton("OK", new ImageIcon(getClass().getResource("images/ok.png")));
+		cancelButton =
+			new JButton("Cancel", new ImageIcon(getClass().getResource(
+				"images/cancel.png")));
 		panel.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
+		final GridBagConstraints constraints = new GridBagConstraints();
 		setSize(new Dimension(200, 300));
 		constraints.gridx = 0;
 		constraints.gridy = 0;
@@ -111,64 +117,55 @@ public class SelectImageDialog extends JDialog {
 		panel.add(cancelButton, constraints);
 		this.getContentPane().add(panel);
 		setTitle("Select...");
-		if (channel)
-			imageList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		else
-			imageList
-					.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		if (channel) imageList
+			.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		else imageList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setListeners();
 		centerWindow();
 	}
 
-	private void fillList(byte filter) {
-		int[] imagesIDs = WindowManager.getIDList();
+	private void fillList(final byte filter) {
+		final int[] imagesIDs = WindowManager.getIDList();
 		images = new Vector<String>();
 		fileInfos = new Vector<ListBoxImage>();
-		if (imagesIDs == null)
-			return;
+		if (imagesIDs == null) return;
 		for (int i = 0; i < imagesIDs.length; i++) {
 			if (WindowManager.getImage(imagesIDs[i]) != null) {
-				FileInfo fi = WindowManager.getImage(imagesIDs[i])
-						.getOriginalFileInfo();
+				final FileInfo fi =
+					WindowManager.getImage(imagesIDs[i]).getOriginalFileInfo();
 				boolean add = false;
 				if (fi != null && fi instanceof LSMFileInfo) {
-					LSMFileInfo lsm = (LSMFileInfo) fi;
-					CZLSMInfoExtended cz = (CZLSMInfoExtended) ((ImageDirectory)lsm.imageDirectories
-							.get(0)).TIF_CZ_LSMINFO;
-					if (filter == MasterModel.TIME)
-						if (cz.DimensionTime > 1)
-							add = true;
-					if (filter == MasterModel.DEPTH)
-						if (cz.DimensionZ > 1){
-							add = true;}
-					if (filter == MasterModel.CHANNEL)
-						if ((cz.SpectralScan == 1 && cz.channelWavelength != null)
-								&& cz.channelWavelength.Channels >= 1)
-							add = true;
-					if (filter == MasterModel.NONE)
+					final LSMFileInfo lsm = (LSMFileInfo) fi;
+					final CZLSMInfoExtended cz =
+						(CZLSMInfoExtended) ((ImageDirectory) lsm.imageDirectories.get(0)).TIF_CZ_LSMINFO;
+					if (filter == MasterModel.TIME) if (cz.DimensionTime > 1) add = true;
+					if (filter == MasterModel.DEPTH) if (cz.DimensionZ > 1) {
 						add = true;
+					}
+					if (filter == MasterModel.CHANNEL) if ((cz.SpectralScan == 1 && cz.channelWavelength != null) &&
+						cz.channelWavelength.Channels >= 1) add = true;
+					if (filter == MasterModel.NONE) add = true;
 					if (add) {
 						images.add(lsm.fileName);
-						fileInfos.add(new ListBoxImage(lsm.fileName, lsm,
-								imagesIDs[i]));
+						fileInfos.add(new ListBoxImage(lsm.fileName, lsm, imagesIDs[i]));
 					}
 				}
 			}
 		}
-		ComboBoxModel cbm = new DefaultComboBoxModel(images);
+		final ComboBoxModel cbm = new DefaultComboBoxModel(images);
 		imageList.setModel(cbm);
 	}
 
 	private void setListeners() {
 		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (imageList.getModel().getSize() == 0)
-					return;
-				int[] selectedIndices = imageList.getSelectedIndices();
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				if (imageList.getModel().getSize() == 0) return;
+				final int[] selectedIndices = imageList.getSelectedIndices();
 				values = new int[selectedIndices.length];
 				for (int i = 0; i < selectedIndices.length; i++) {
-					ListBoxImage im = (ListBoxImage) fileInfos
-							.get(selectedIndices[i]);
+					final ListBoxImage im = fileInfos.get(selectedIndices[i]);
 					values[i] = im.imageIndex;
 				}
 				returnVal = OK_OPTION;
@@ -176,7 +173,9 @@ public class SelectImageDialog extends JDialog {
 			}
 		});
 		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 				returnVal = CANCEL_OPTION;
 				setVisible(false);
 			}
@@ -194,8 +193,8 @@ public class SelectImageDialog extends JDialog {
 	}
 
 	public void centerWindow() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation((screenSize.width - this.getWidth()) / 2,
-				(screenSize.height - this.getHeight()) / 2);
+			(screenSize.height - this.getHeight()) / 2);
 	}
 }

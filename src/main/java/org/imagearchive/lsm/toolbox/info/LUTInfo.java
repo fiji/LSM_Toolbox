@@ -1,6 +1,8 @@
+
 package org.imagearchive.lsm.toolbox.info;
 
 public class LUTInfo {
+
 	public long LUT_SIZE = 0;
 
 	public long SUBBLOCKS_COUNT = 0;
