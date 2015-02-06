@@ -32,10 +32,10 @@ public class StampUtils {
 		final Recording r = cz.scanInfo.recordings.get(0);
 		final double planeSpacing =
 			((Double) r.records.get("PLANE_SPACING")).doubleValue();
-		double ps = 0;
+		double ps = 0.0D;
 		final String[] stamps = new String[(int) cz.DimensionZ];
 		for (int k = 0; k < cz.DimensionZ; k++) {
-			stamps[k] = IJ.d2s(ps, 2) + " " + MasterModel.micrometer;
+			stamps[k] = (IJ.d2s(ps, 2) + " " + MasterModel.micrometer);
 			ps += planeSpacing;
 		}
 		return implode(stamps);
@@ -53,8 +53,8 @@ public class StampUtils {
 		final String[] stamps = new String[(int) cz.channelWavelength.Channels];
 		for (int k = 0; k < cz.channelWavelength.Channels; k++) {
 			stamps[k] = IJ.d2s(cz.channelWavelength.LambdaStamps[k], 2);
-
 		}
+
 		return implode(stamps);
 	}
 
@@ -89,5 +89,4 @@ public class StampUtils {
 		}
 		return result;
 	}
-
 }

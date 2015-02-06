@@ -54,9 +54,7 @@ import org.imagearchive.lsm.toolbox.info.scaninfo.Recording;
 public class ControlPanelFrame extends JFrame {
 
 	public InfoFrame infoFrame;
-
 	private JPanel pan;
-
 	private final GridBagLayout gridBagLayout = new GridBagLayout();
 
 	private final GUIButton openLSMButton = new GUIButton(" Open LSM ",
@@ -110,7 +108,7 @@ public class ControlPanelFrame extends JFrame {
 
 	private final String title = " LSM Toolbox ";
 
-	private final JLabel titleLabel = new JLabel("", JLabel.CENTER);
+	private final JLabel titleLabel = new JLabel("", 0);
 
 	private final JPopupMenu stampsPM = new JPopupMenu();
 
@@ -128,145 +126,129 @@ public class ControlPanelFrame extends JFrame {
 	private final JMenuItem mergeItem = new JMenuItem("Merge images");
 
 	public String[] LSMinfoText = new String[22];
-
 	public long timestamps_count;
-
 	private final Dimension ScreenDimension = Toolkit.getDefaultToolkit()
 		.getScreenSize();
 
-	private final int ScreenX = (int) ScreenDimension.getWidth();
+	private final int ScreenX = (int) this.ScreenDimension.getWidth();
 
-	private final int ScreenY = (int) ScreenDimension.getHeight();
+	private final int ScreenY = (int) this.ScreenDimension.getHeight();
 
 	private int baseFrameXlocation = 0;
 
 	private int baseFrameYlocation = 0;
 
 	private int selectedToolBarButtonID = -1;
-
 	private final MasterModel masterModel;
 
 	public ControlPanelFrame(final MasterModel masterModel)
 		throws HeadlessException
 	{
-		super();
 		this.masterModel = masterModel;
 		ServiceMediator.registerControlPanelFrame(this);
 	}
 
 	public void initializeGUI() {
-		setTitle("LSM Toolbox " + MasterModel.VERSION);
+		setTitle("LSM Toolbox 4.0g");
 		setResizable(false);
-		addExitListener(exitButton, this);
-		addShowHideInfolistener(showInfoButton, this);
-		addOpenListener(openLSMButton, this);
-		addCloseWinListener(closeWindowsButton, this);
-		addStampsListener(applyStampButton, this);
-		addApplyZStampListener(applyZStampItem, this);
-		addApplyTStampListener(applyTStampItem, this);
-		addApplyLambdaStampListener(applyLStampItem, this);
-		addLUTListener(editPaletteButton, this);
-		addBatchConvertListener(batchConvertButton, this);
-		addHelpListener(helpButton, this);
-		addMacroButtonListener(macroButton, this);
-		addHyperVolumeBrowseListener(hyperVolumeItem, this);
-		addImage5DListener(image5DItem, this);
-		addBrowseListener(browseButton, this);
-		addFuseListener(fuseItem, this);
-		addMergeListener(mergeItem, this);
-		addFMListener(fmButton, this);
-		pan = new JPanel();
-		pan.setForeground(SystemColor.window);
-		pan.setLayout(gridBagLayout);
+		addExitListener(this.exitButton, this);
+		addShowHideInfolistener(this.showInfoButton, this);
+		addOpenListener(this.openLSMButton, this);
+		addCloseWinListener(this.closeWindowsButton, this);
+		addStampsListener(this.applyStampButton, this);
+		addApplyZStampListener(this.applyZStampItem, this);
+		addApplyTStampListener(this.applyTStampItem, this);
+		addApplyLambdaStampListener(this.applyLStampItem, this);
+		addLUTListener(this.editPaletteButton, this);
+		addBatchConvertListener(this.batchConvertButton, this);
+		addHelpListener(this.helpButton, this);
+		addMacroButtonListener(this.macroButton, this);
+		addHyperVolumeBrowseListener(this.hyperVolumeItem, this);
+		addImage5DListener(this.image5DItem, this);
+		addBrowseListener(this.browseButton, this);
+		addFuseListener(this.fuseItem, this);
+		addMergeListener(this.mergeItem, this);
+		addFMListener(this.fmButton, this);
+		this.pan = new JPanel();
+		this.pan.setForeground(SystemColor.window);
+		this.pan.setLayout(this.gridBagLayout);
 		final GridBagConstraints constraints = new GridBagConstraints();
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		constraints.fill = GridBagConstraints.BOTH;
-		titleLabel.setText(title + " ver " + MasterModel.VERSION);
-		pan.add(titleLabel, constraints);
-		constraints.gridy++;
-		pan.add(openLSMButton, constraints);
-		constraints.gridy++;
-		pan.add(showInfoButton, constraints);
-		constraints.gridy++;
-		pan.add(macroButton, constraints);
-		constraints.gridy++;
-		pan.add(applyStampButton, constraints);
-		stampsPM.add(applyZStampItem);
-		stampsPM.add(applyTStampItem);
-		stampsPM.add(applyLStampItem);
+		constraints.fill = 1;
+		this.titleLabel.setText(this.title + " ver " + "4.0g");
+		this.pan.add(this.titleLabel, constraints);
+		constraints.gridy += 1;
+		this.pan.add(this.openLSMButton, constraints);
+		constraints.gridy += 1;
+		this.pan.add(this.showInfoButton, constraints);
+		constraints.gridy += 1;
+		this.pan.add(this.macroButton, constraints);
+		constraints.gridy += 1;
+		this.pan.add(this.applyStampButton, constraints);
+		this.stampsPM.add(this.applyZStampItem);
+		this.stampsPM.add(this.applyTStampItem);
+		this.stampsPM.add(this.applyLStampItem);
 
-		if (isPluginInstalled("HyperVolume_Browser") || isImage5DInstalled()) {
-			constraints.gridy++;
-			pan.add(browseButton, constraints);
-			hyperVolumePM.add(hyperVolumeItem);
-			hyperVolumePM.add(image5DItem);
-			if (!isPluginInstalled("HyperVolume_Browser")) hyperVolumeItem
+		if ((isPluginInstalled("HyperVolume_Browser")) || (isImage5DInstalled())) {
+			constraints.gridy += 1;
+			this.pan.add(this.browseButton, constraints);
+			this.hyperVolumePM.add(this.hyperVolumeItem);
+			this.hyperVolumePM.add(this.image5DItem);
+			if (!isPluginInstalled("HyperVolume_Browser")) this.hyperVolumeItem
 				.setEnabled(false);
-			if (!isImage5DInstalled()) image5DItem.setEnabled(false);
+			if (!isImage5DInstalled()) {
+				this.image5DItem.setEnabled(false);
+			}
 		}
-
-		if (isPluginInstalled("LSM_Fusion") || isPluginInstalled("LSM_Merge")) {
-			constraints.gridy++;
-			pan.add(fmButton, constraints);
-			fmPM.add(fuseItem);
-			fmPM.add(mergeItem);
-			if (!isPluginInstalled("LSM_Fusion")) fuseItem.setEnabled(false);
-			if (!isPluginInstalled("LSM_Merge")) mergeItem.setEnabled(false);
+		if ((isPluginInstalled("LSM_Fusion")) || (isPluginInstalled("LSM_Merge"))) {
+			constraints.gridy += 1;
+			this.pan.add(this.fmButton, constraints);
+			this.fmPM.add(this.fuseItem);
+			this.fmPM.add(this.mergeItem);
+			if (!isPluginInstalled("LSM_Fusion")) this.fuseItem.setEnabled(false);
+			if (!isPluginInstalled("LSM_Merge")) {
+				this.mergeItem.setEnabled(false);
+			}
 		}
-
 		if (isPluginInstalled("Lut_Panel")) {
-			constraints.gridy++;
-			pan.add(editPaletteButton, constraints);
+			constraints.gridy += 1;
+			this.pan.add(this.editPaletteButton, constraints);
 		}
-		constraints.gridy++;
-		pan.add(closeWindowsButton, constraints);
-		constraints.gridy++;
-		pan.add(batchConvertButton, constraints);
-		constraints.gridy++;
-		pan.add(helpButton, constraints);
-		constraints.gridy++;
-		pan.add(exitButton, constraints);
-		getContentPane().add(pan);
+		constraints.gridy += 1;
+		this.pan.add(this.closeWindowsButton, constraints);
+		constraints.gridy += 1;
+		this.pan.add(this.batchConvertButton, constraints);
+		constraints.gridy += 1;
+		this.pan.add(this.helpButton, constraints);
+		constraints.gridy += 1;
+		this.pan.add(this.exitButton, constraints);
+		getContentPane().add(this.pan);
 		addWindowListener(new WindowAdapter() {
 
 			@Override
 			public void windowClosing(final WindowEvent e) {
-				dispose();
+				ControlPanelFrame.this.dispose();
 			}
 		});
-
 		initInfoFrame();
-		/*
-		 * masterModel.addMasterModelListener(new MasterModelAdapter() { public
-		 * void LSMFileInfoChanged(MasterModelEvent evt) { updateShowInfo(); if
-		 * (masterModel.getCz().DimensionTime <= 1)
-		 * applyTStampItem.setEnabled(false); else
-		 * applyTStampItem.setEnabled(true); if (masterModel.getCz().DimensionZ
-		 * <= 1) applyZStampItem.setEnabled(false); else
-		 * applyZStampItem.setEnabled(true); if
-		 * (masterModel.getCz().SpectralScan == 0)
-		 * applyLStampItem.setEnabled(false); else if
-		 * (masterModel.getCz().channelWavelength != null &&
-		 * masterModel.getCz().channelWavelength.Channels >= 1)
-		 * applyLStampItem.setEnabled(true); pack(); } });
-		 */
+
 		new CPDragAndDrop(this);
 		invalidate();
 		pack();
-		baseFrameXlocation = (ScreenX) - (this.getWidth());
-		baseFrameYlocation = (ScreenY / 2) - (this.getHeight());
-		setLocation(baseFrameXlocation, baseFrameYlocation);
+		this.baseFrameXlocation = (this.ScreenX - getWidth());
+		this.baseFrameYlocation = (this.ScreenY / 2 - getHeight());
+		setLocation(this.baseFrameXlocation, this.baseFrameYlocation);
 		setVisible(true);
 	}
 
 	private void closeFrames() {
-		infoFrame.dispose();
+		this.infoFrame.dispose();
 		dispose();
 	}
 
 	public void initInfoFrame() {
-		infoFrame = new InfoFrame();
+		this.infoFrame = new InfoFrame();
 	}
 
 	private void addExitListener(final JButton button, final JFrame parent) {
@@ -274,8 +256,8 @@ public class ControlPanelFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				ij.WindowManager.closeAllWindows();
-				closeFrames();
+				WindowManager.closeAllWindows();
+				ControlPanelFrame.this.closeFrames();
 			}
 		});
 	}
@@ -286,12 +268,9 @@ public class ControlPanelFrame extends JFrame {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				final Component c = (Component) e.getSource();
-				if (!hyperVolumePM.isShowing()) {
-					hyperVolumePM.show(c, 0, 2 + c.getHeight());
-				}
-				else {
-					hyperVolumePM.setVisible(false);
-				}
+				if (!ControlPanelFrame.this.hyperVolumePM.isShowing()) ControlPanelFrame.this.hyperVolumePM
+					.show(c, 0, 2 + c.getHeight());
+				else ControlPanelFrame.this.hyperVolumePM.setVisible(false);
 			}
 		});
 	}
@@ -330,7 +309,8 @@ public class ControlPanelFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				new BatchDialog(parent, masterModel).setVisible(true);
+				new BatchDialog(parent, ControlPanelFrame.this.masterModel)
+					.setVisible(true);
 			}
 		});
 	}
@@ -340,7 +320,8 @@ public class ControlPanelFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				new AboutDialog(parent, masterModel).setVisible(true);
+				new AboutDialog(parent, ControlPanelFrame.this.masterModel)
+					.setVisible(true);
 			}
 		});
 	}
@@ -352,7 +333,8 @@ public class ControlPanelFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				new MacroInstaller().install(masterModel.getMagicMontaqe());
+				new MacroInstaller().install(ControlPanelFrame.this.masterModel
+					.getMagicMontaqe());
 			}
 		});
 	}
@@ -362,11 +344,11 @@ public class ControlPanelFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				ij.WindowManager.closeAllWindows();
-				setLSMinfoText(new String[22]);
-				infoFrame.getDetailsFrame().dispose();
-				infoFrame.dispose();
-				showInfoButton.setEnabled(false);
+				WindowManager.closeAllWindows();
+				ControlPanelFrame.this.setLSMinfoText(new String[22]);
+				ControlPanelFrame.this.infoFrame.getDetailsFrame().dispose();
+				ControlPanelFrame.this.infoFrame.dispose();
+				ControlPanelFrame.this.showInfoButton.setEnabled(false);
 			}
 		});
 	}
@@ -378,8 +360,9 @@ public class ControlPanelFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				if (infoFrame.isShowing() == false) infoFrame.setVisible(true);
-				else infoFrame.setVisible(false);
+				if (!ControlPanelFrame.this.infoFrame.isShowing()) ControlPanelFrame.this.infoFrame
+					.setVisible(true);
+				else ControlPanelFrame.this.infoFrame.setVisible(false);
 			}
 		});
 	}
@@ -390,14 +373,10 @@ public class ControlPanelFrame extends JFrame {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				final Component c = (Component) e.getSource();
-				if (!stampsPM.isShowing()) {
-					stampsPM.show(c, 0, 2 + c.getHeight());
-				}
-				else {
-					stampsPM.setVisible(false);
-				}
+				if (!ControlPanelFrame.this.stampsPM.isShowing()) ControlPanelFrame.this.stampsPM
+					.show(c, 0, 2 + c.getHeight());
+				else ControlPanelFrame.this.stampsPM.setVisible(false);
 			}
-
 		});
 	}
 
@@ -407,14 +386,10 @@ public class ControlPanelFrame extends JFrame {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				final Component c = (Component) e.getSource();
-				if (!fmPM.isShowing()) {
-					fmPM.show(c, 0, 2 + c.getHeight());
-				}
-				else {
-					fmPM.setVisible(false);
-				}
+				if (!ControlPanelFrame.this.fmPM.isShowing()) ControlPanelFrame.this.fmPM
+					.show(c, 0, 2 + c.getHeight());
+				else ControlPanelFrame.this.fmPM.setVisible(false);
 			}
-
 		});
 	}
 
@@ -425,17 +400,17 @@ public class ControlPanelFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-
 				final SelectImageDialog id =
 					new SelectImageDialog(parent,
 						"Select an lsm image to apply Z stamps to", false,
 						MasterModel.DEPTH);
 				final int returnVal = id.showDialog();
-				if (returnVal == SelectImageDialog.OK_OPTION) {
+				if (returnVal == 0) {
 					final int[] imageVals = id.getSelected();
-					if (imageVals == null & imageVals.length > 0) {
+					if (((imageVals == null ? 1 : 0) & (imageVals.length > 0 ? 1 : 0)) != 0)
+					{
 						JOptionPane.showMessageDialog(parent, "No image has been selected",
-							"Error", JOptionPane.ERROR_MESSAGE);
+							"Error", 0);
 						return;
 					}
 					final String[] choices = { "Dump to textfile", "Apply to image" };
@@ -459,17 +434,17 @@ public class ControlPanelFrame extends JFrame {
 							((Double) r.records.get("PLANE_SPACING")).doubleValue();
 						if (choice.equals("Dump to textfile")) {
 							String twstr = new String("");
-							double ps = 0;
+							double ps = 0.0D;
 							for (int k = 1; i <= cz.DimensionZ; k++) {
 								final String s = IJ.d2s(ps, 2) + " " + MasterModel.micrometer;
-								ps += planeSpacing; // moved from line -2
+								ps += planeSpacing;
 								twstr = twstr + s + "\n";
 							}
 							new TextWindow("Z-stamps", "Z-stamps", twstr, 200, 400);
-
 						}
 						else {
-							applyZSTAMP(imp, (LSMFileInfo) imp.getOriginalFileInfo());
+							ControlPanelFrame.this.applyZSTAMP(imp, (LSMFileInfo) imp
+								.getOriginalFileInfo());
 						}
 					}
 				}
@@ -489,11 +464,12 @@ public class ControlPanelFrame extends JFrame {
 						"Select an lsm image to apply time stamps to", false,
 						MasterModel.TIME);
 				final int returnVal = id.showDialog();
-				if (returnVal == SelectImageDialog.OK_OPTION) {
+				if (returnVal == 0) {
 					final int[] imageVals = id.getSelected();
-					if (imageVals == null & imageVals.length > 0) {
+					if (((imageVals == null ? 1 : 0) & (imageVals.length > 0 ? 1 : 0)) != 0)
+					{
 						JOptionPane.showMessageDialog(parent, "No image has been selected",
-							"Error", JOptionPane.ERROR_MESSAGE);
+							"Error", 0);
 						return;
 					}
 					final String[] choices = { "Dump to textfile", "Apply to image" };
@@ -520,7 +496,8 @@ public class ControlPanelFrame extends JFrame {
 							new TextWindow("Timestamps", "Timestamps", twstr, 200, 400);
 						}
 						else {
-							applyTSTAMP(imp, (LSMFileInfo) imp.getOriginalFileInfo());
+							ControlPanelFrame.this.applyTSTAMP(imp, (LSMFileInfo) imp
+								.getOriginalFileInfo());
 						}
 					}
 				}
@@ -540,11 +517,12 @@ public class ControlPanelFrame extends JFrame {
 						"Select an lsm image to apply lambda stamps to", false,
 						MasterModel.CHANNEL);
 				final int returnVal = id.showDialog();
-				if (returnVal == SelectImageDialog.OK_OPTION) {
+				if (returnVal == 0) {
 					final int[] imageVals = id.getSelected();
-					if (imageVals == null & imageVals.length > 0) {
+					if (((imageVals == null ? 1 : 0) & (imageVals.length > 0 ? 1 : 0)) != 0)
+					{
 						JOptionPane.showMessageDialog(parent, "No image has been selected",
-							"Error", JOptionPane.ERROR_MESSAGE);
+							"Error", 0);
 						return;
 					}
 					final String[] choices = { "Dump to textfile", "Apply to image" };
@@ -571,17 +549,17 @@ public class ControlPanelFrame extends JFrame {
 
 						if (choice.equals("Dump to textfile")) {
 							String twstr = new String("");
-							for (int k = 0; k < cz.channelWavelength.Channels; k++)
+							for (int k = 0; k < cz.channelWavelength.Channels; k++) {
 								twstr =
 									twstr +
 										Double.toString(cz.channelWavelength.LambdaStamps[k]) +
 										"\n";
-
+							}
 							new TextWindow("Lambdastamps", "Lambdastamps", twstr, 200, 400);
-
 						}
 						else {
-							applyLSTAMP(imp, (LSMFileInfo) imp.getOriginalFileInfo());
+							ControlPanelFrame.this.applyLSTAMP(imp, (LSMFileInfo) imp
+								.getOriginalFileInfo());
 						}
 					}
 				}
@@ -598,11 +576,12 @@ public class ControlPanelFrame extends JFrame {
 					new SelectImageDialog(parent, "Select an image to open with Image5D",
 						false);
 				final int returnVal = id.showDialog();
-				if (returnVal == SelectImageDialog.OK_OPTION) {
+				if (returnVal == 0) {
 					final int[] imageVals = id.getSelected();
-					if (imageVals == null & imageVals.length > 0) {
+					if (((imageVals == null ? 1 : 0) & (imageVals.length > 0 ? 1 : 0)) != 0)
+					{
 						JOptionPane.showMessageDialog(parent, "No image has been selected",
-							"Error", JOptionPane.ERROR_MESSAGE);
+							"Error", 0);
 						return;
 					}
 					final Reader reader = ServiceMediator.getReader();
@@ -620,7 +599,7 @@ public class ControlPanelFrame extends JFrame {
 										(CZLSMInfoExtended) ((ImageDirectory) openLSM.imageDirectories
 											.get(0)).TIF_CZ_LSMINFO;
 									Class i5Dc = null;
-									if (imp == null || imp.getStackSize() == 0) {
+									if ((imp == null) || (imp.getStackSize() == 0)) {
 										IJ.error("Could not open file.");
 										return;
 									}
@@ -641,8 +620,8 @@ public class ControlPanelFrame extends JFrame {
 									try {
 										i5Dcon =
 											i5Dc.getConstructor(new Class[] { String.class,
-												int.class, int.class, int.class, int.class, int.class,
-												int.class, boolean.class });
+												Integer.TYPE, Integer.TYPE, Integer.TYPE, Integer.TYPE,
+												Integer.TYPE, Integer.TYPE, Boolean.TYPE });
 										o =
 											i5Dcon
 												.newInstance(new Object[] { openLSM.fileName,
@@ -657,8 +636,8 @@ public class ControlPanelFrame extends JFrame {
 										final Method i5DsetCurrentPosition =
 											o.getClass().getMethod(
 												"setCurrentPosition",
-												new Class[] { int.class, int.class, int.class,
-													int.class, int.class });
+												new Class[] { Integer.TYPE, Integer.TYPE, Integer.TYPE,
+													Integer.TYPE, Integer.TYPE });
 										final Method i5DsetPixels =
 											o.getClass().getMethod("setPixels",
 												new Class[] { Object.class });
@@ -666,12 +645,12 @@ public class ControlPanelFrame extends JFrame {
 											o.getClass().getMethod("setCalibration",
 												new Class[] { Calibration.class });
 										final Method i5Dshow =
-											o.getClass().getMethod("show", new Class[] {});
+											o.getClass().getMethod("show", new Class[0]);
 										final Method i5DgetWindow =
-											o.getClass().getMethod("getWindow", new Class[] {});
+											o.getClass().getMethod("getWindow", new Class[0]);
 										final Method i5DsetChannelColorModel =
 											o.getClass().getMethod("setChannelColorModel",
-												new Class[] { int.class, ColorModel.class });
+												new Class[] { Integer.TYPE, ColorModel.class });
 
 										final Method i5DsetFileInfo =
 											o.getClass().getMethod("setFileInfo",
@@ -687,9 +666,9 @@ public class ControlPanelFrame extends JFrame {
 													imp.setSlice(position++);
 													i5DsetPixels.invoke(o, new Object[] { imp
 														.getProcessor().getPixels() });
-
 												}
 											}
+
 											for (int c = 0; c < cz.DimensionChannels; c++) {
 												i5DsetChannelColorModel.invoke(o, new Object[] {
 													new Integer(c + 1),
@@ -700,8 +679,8 @@ public class ControlPanelFrame extends JFrame {
 											.getCalibration().copy() });
 										i5DsetFileInfo.invoke(o, new Object[] { (LSMFileInfo) imp
 											.getOriginalFileInfo() });
-										i5Dshow.invoke(o, new Object[] {});
-										((ImageWindow) i5DgetWindow.invoke(o, new Object[] {}))
+										i5Dshow.invoke(o, new Object[0]);
+										((ImageWindow) i5DgetWindow.invoke(o, new Object[0]))
 											.addWindowFocusListener(new ImageFocusListener());
 
 										ServiceMediator.getInfoFrame().updateInfoFrame();
@@ -749,12 +728,13 @@ public class ControlPanelFrame extends JFrame {
 						"Select one or more channels to open with HyperVolume_Browser",
 						true);
 				final int returnVal = id.showDialog();
-				if (returnVal == SelectImageDialog.OK_OPTION) {
+				if (returnVal == 0) {
 					final int[] imageVals = id.getSelected();
 
-					if (imageVals == null & imageVals.length > 0) {
+					if (((imageVals == null ? 1 : 0) & (imageVals.length > 0 ? 1 : 0)) != 0)
+					{
 						JOptionPane.showMessageDialog(parent, "No image has been selected",
-							"Error", JOptionPane.ERROR_MESSAGE);
+							"Error", 0);
 						return;
 					}
 					final Reader reader = ServiceMediator.getReader();
@@ -762,15 +742,12 @@ public class ControlPanelFrame extends JFrame {
 						final ImagePlus imp = WindowManager.getImage(imageVals[i]);
 						reader.updateMetadata(imp);
 						final FileInfo fi = imp.getOriginalFileInfo();
-						if (fi != null && fi instanceof LSMFileInfo) {
+						if ((fi != null) && ((fi instanceof LSMFileInfo))) {
 							final LSMFileInfo lsm = (LSMFileInfo) fi;
 							final CZLSMInfoExtended cz =
 								(CZLSMInfoExtended) ((ImageDirectory) lsm.imageDirectories
 									.get(0)).TIF_CZ_LSMINFO;
-							// System.err.println("dimz:" + cz.DimensionZ);
-							// if (cz.DimensionZ/imageVals.length)
-							// long depth = (long) (cz.DimensionZ /
-							// imageVals.length);
+
 							final long depth = cz.DimensionZ;
 							IJ.selectWindow(imageVals[i]);
 							IJ.runPlugIn("HyperVolume_Browser", "3rd=z depth=" + depth +
@@ -813,31 +790,31 @@ public class ControlPanelFrame extends JFrame {
 	}
 
 	public void setLSMinfoText(final String[] str) {
-		LSMinfoText = str;
+		this.LSMinfoText = str;
 	}
 
 	public void applyZSTAMP(final ImagePlus imp, final LSMFileInfo lfi) {
 		int x = 2;
 		int y = 40;
-		double ps = 0;
+		double ps = 0.0D;
 		final ImageStack stack = imp.getStack();
-		final Font font = new Font("SansSerif", Font.PLAIN, 20);
+		final Font font = new Font("SansSerif", 0, 20);
 		ImageProcessor ip = imp.getProcessor();
 		final Rectangle roi = ip.getRoi();
-		if (roi.width < ip.getWidth() || roi.height < ip.getHeight()) {
+		if ((roi.width < ip.getWidth()) || (roi.height < ip.getHeight())) {
 			x = roi.x;
 			y = roi.y + roi.height;
 		}
 		final Color c = Toolbar.getForegroundColor();
 		final CZLSMInfoExtended cz =
 			(CZLSMInfoExtended) ((ImageDirectory) lfi.imageDirectories.get(0)).TIF_CZ_LSMINFO;
-		if (cz.DimensionZ != 1) {
+		if (cz.DimensionZ != 1L) {
 			final Recording r = cz.scanInfo.recordings.get(0);
 			final double planeSpacing =
 				((Double) r.records.get("PLANE_SPACING")).doubleValue();
 			int stackPosition = 1;
 			for (int i = 1; i <= cz.DimensionTime; i++) {
-				ps = 0;
+				ps = 0.0D;
 				for (int j = 1; j <= cz.DimensionZ; j++) {
 					for (int k = 1; k <= cz.DimensionChannels; k++) {
 						if (stackPosition <= imp.getStackSize()) {
@@ -848,7 +825,7 @@ public class ControlPanelFrame extends JFrame {
 							ip.setFont(font);
 							final float[] hsb =
 								Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
-							ip.setColor(Color.getHSBColor(255, 255, 255 - hsb[2]));
+							ip.setColor(Color.getHSBColor(255.0F, 255.0F, 255.0F - hsb[2]));
 							ip.moveTo(x, y);
 							ip.drawString(s);
 						}
@@ -865,35 +842,35 @@ public class ControlPanelFrame extends JFrame {
 		int y = 20;
 
 		final ImageStack stack = imp.getStack();
-		final Font font = new Font("SansSerif", Font.PLAIN, 20);
+		final Font font = new Font("SansSerif", 0, 20);
 		ImageProcessor ip = imp.getProcessor();
 		final Rectangle roi = ip.getRoi();
-		if (roi.width < ip.getWidth() || roi.height < ip.getHeight()) {
+		if ((roi.width < ip.getWidth()) || (roi.height < ip.getHeight())) {
 			x = roi.x;
 			y = roi.y + roi.height;
 		}
 		final Color c = Toolbar.getForegroundColor();
 		final CZLSMInfoExtended cz =
 			(CZLSMInfoExtended) ((ImageDirectory) lfi.imageDirectories.get(0)).TIF_CZ_LSMINFO;
-		if (cz.DimensionTime > 1) {
+		if (cz.DimensionTime > 1L) {
 			int stackPosition = 1;
-			for (int i = 1; i <= cz.DimensionTime; i++)
+			for (int i = 1; i <= cz.DimensionTime; i++) {
 				for (int j = 1; j <= cz.DimensionZ; j++)
-					for (int k = 1; k <= cz.DimensionChannels; k++) {
+					for (int k = 1; k <= cz.DimensionChannels; k++)
 						if (stackPosition <= imp.getStackSize()) {
 							IJ.showStatus("MinMax: " + stackPosition + "/" +
 								cz.timeStamps.NumberTimeStamps);
 							final String s =
-								IJ.d2s(cz.timeStamps.TimeStamps[i - 1], 2) + " s";
+								IJ.d2s(cz.timeStamps.TimeStamps[(i - 1)], 2) + " s";
 							ip = stack.getProcessor(stackPosition++);
 							ip.setFont(font);
 							final float[] hsb =
 								Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
-							ip.setColor(Color.getHSBColor(255, 255, 255 - hsb[2]));
+							ip.setColor(Color.getHSBColor(255.0F, 255.0F, 255.0F - hsb[2]));
 							ip.moveTo(x, y);
 							ip.drawString(s);
 						}
-					}
+			}
 		}
 		imp.updateAndRepaintWindow();
 	}
@@ -903,30 +880,30 @@ public class ControlPanelFrame extends JFrame {
 		int y = 60;
 		ImageProcessor ip = imp.getProcessor();
 		final Rectangle roi = ip.getRoi();
-		if (roi.width < ip.getWidth() || roi.height < ip.getHeight()) {
+		if ((roi.width < ip.getWidth()) || (roi.height < ip.getHeight())) {
 			x = roi.x;
 			y = roi.y + roi.height;
 		}
 		final CZLSMInfoExtended cz =
 			(CZLSMInfoExtended) ((ImageDirectory) lfi.imageDirectories.get(0)).TIF_CZ_LSMINFO;
 		final ImageStack stack = imp.getStack();
-		final Font font = new Font("SansSerif", Font.PLAIN, 20);
+		final Font font = new Font("SansSerif", 0, 20);
 		final Color c = Toolbar.getForegroundColor();
-		if (cz.DimensionChannels > 1 && cz.SpectralScan == 1) {
+		if ((cz.DimensionChannels > 1L) && (cz.SpectralScan == 1)) {
 			int stackPosition = 1;
 			for (int i = 1; i <= cz.DimensionTime; i++) {
 				for (int j = 1; j <= cz.DimensionZ; j++) {
 					for (int k = 1; k <= cz.DimensionChannels; k++) {
 						if (stackPosition <= imp.getStackSize()) {
 							final double channelWaveLength =
-								cz.channelWavelength.LambdaStamps[k - 1];
+								cz.channelWavelength.LambdaStamps[(k - 1)];
 							final String s =
-								IJ.d2s(channelWaveLength * 1000000000, 2) + " nm";
+								IJ.d2s(channelWaveLength * 1000000000.0D, 2) + " nm";
 							ip = stack.getProcessor(stackPosition++);
 							ip.setFont(font);
 							final float[] hsb =
 								Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
-							ip.setColor(Color.getHSBColor(255, 255, 255 - hsb[2]));
+							ip.setColor(Color.getHSBColor(255.0F, 255.0F, 255.0F - hsb[2]));
 							ip.moveTo(x, y);
 							ip.drawString(s);
 						}
@@ -943,9 +920,7 @@ public class ControlPanelFrame extends JFrame {
 			Class.forName(className);
 			found = true;
 		}
-		catch (final ClassNotFoundException e) {
-
-		}
+		catch (final ClassNotFoundException localClassNotFoundException) {}
 		return found;
 	}
 
@@ -960,7 +935,7 @@ public class ControlPanelFrame extends JFrame {
 				Class.forName("i5d.gui.Image5DWindow");
 				installed = true;
 			}
-			catch (final ClassNotFoundException e2) {}
+			catch (final ClassNotFoundException localClassNotFoundException1) {}
 		}
 		return installed;
 	}
@@ -976,18 +951,17 @@ public class ControlPanelFrame extends JFrame {
 				Class.forName("i5d.gui.Image5DWindow");
 				installed = true;
 			}
-			catch (final ClassNotFoundException e2) {}
+			catch (final ClassNotFoundException localClassNotFoundException1) {}
 		}
 		return installed;
 	}
 
 	public int getSelectedToolBarButtonID() {
-		return selectedToolBarButtonID;
+		return this.selectedToolBarButtonID;
 	}
 
 	public void resetToolbar() {
-		rbButton.setSelected(true);
-		selectedToolBarButtonID = -1;
-
+		this.rbButton.setSelected(true);
+		this.selectedToolBarButtonID = -1;
 	}
 }

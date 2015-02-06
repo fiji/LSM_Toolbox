@@ -5,21 +5,24 @@ import java.util.LinkedHashMap;
 
 public class BeamSplitter {
 
-	public LinkedHashMap<String, Object> records =
-		new LinkedHashMap<String, Object>();
+	public LinkedHashMap<String, Object> records = new LinkedHashMap();
 
 	public Object[][] data = {
-		{ new Long(0x0B0000001), DataType.STRING, "FILTER_SET" },
-		{ new Long(0x0B0000002), DataType.STRING, "FILTER" },
-		{ new Long(0x0B0000003), DataType.STRING, "BS_NAME" } };
+		{ new Long(-1342177279L), DataType.STRING, "FILTER_SET" },
+		{ new Long(-1342177278L), DataType.STRING, "FILTER" },
+		{ new Long(-1342177277L), DataType.STRING, "BS_NAME" } };
 
 	public static boolean isBeamSplitters(final long tagEntry) {
-		if (tagEntry == 0x0A0000000) return true;
-		else return false;
+		if (tagEntry == -1610612736L) {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isBeamSplitter(final long tagEntry) {
-		if (tagEntry == 0x0B0000000) return true;
-		else return false;
+		if (tagEntry == -1342177280L) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -43,7 +43,7 @@ public class Reader {
 	private final MasterModel masterModel;
 
 	public Reader() {
-		masterModel = MasterModel.getMasterModel();
+		this.masterModel = MasterModel.getMasterModel();
 	}
 
 	public static CZLSMInfoExtended getCZ(final String filename) {
@@ -71,29 +71,31 @@ public class Reader {
 			final String directory = OpenDialog.getDefaultDirectory();
 			if (directory != null) {
 				final File directoryHandler = new File(directory);
-				if (directoryHandler != null && directoryHandler.isDirectory()) fc
+				if ((directoryHandler != null) && (directoryHandler.isDirectory())) fc
 					.setCurrentDirectory(directoryHandler);
 			}
 			final int returnVal = fc.showOpenDialog(null);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if (returnVal == 0) {
 				file = fc.getSelectedFile();
 				if (file == null) {
 					IJ.error("no file selected");
 					return null;
 				}
 				if (file.getAbsolutePath().endsWith(".csv")) {
-					final BatchConverter converter = new BatchConverter(masterModel);
+					final BatchConverter converter = new BatchConverter(this.masterModel);
 					converter.convertBatchFile(file.getAbsolutePath());
 					return null;
 				}
 			}
 		}
-		else file = new File(arg);
+		else {
+			file = new File(arg);
+		}
 		if (file != null) {
 			imp = open(file.getParent(), file.getName(), verbose, false);
 			updateMetadata(imp);
 			final LSMFileInfo openLSM = (LSMFileInfo) imp.getOriginalFileInfo();
-			// printImDirData(openLSM);
+
 			OpenDialog.setDefaultDirectory(file.getParent());
 		}
 		return imp;
@@ -121,15 +123,14 @@ public class Reader {
 			else System.err.println("CZ-Info data is null (not set)");
 			System.err.println("=================================================");
 		}
-
 	}
 
 	public void
 		readMetadata(final RandomAccessStream stream, final ImagePlus imp)
 	{
-		if (imp.getOriginalFileInfo() instanceof LSMFileInfo) {
+		if ((imp.getOriginalFileInfo() instanceof LSMFileInfo)) {
 			final LSMFileInfo lsm = (LSMFileInfo) imp.getOriginalFileInfo();
-			if (lsm.fullyRead == true) return;
+			if (lsm.fullyRead) return;
 			final ImageDirectory imDir = (ImageDirectory) lsm.imageDirectories.get(0);
 			if (imDir == null) return;
 			final long offset = imDir.TIF_CZ_LSMINFO_OFFSET;
@@ -141,12 +142,11 @@ public class Reader {
 
 	public void updateMetadata(final ImagePlus imp) {
 		if (imp == null) return;
-		if (imp.getOriginalFileInfo() instanceof LSMFileInfo) {
+		if ((imp.getOriginalFileInfo() instanceof LSMFileInfo)) {
 			final LSMFileInfo lsm = (LSMFileInfo) imp.getOriginalFileInfo();
-			if (lsm.fullyRead == true) return;
-			RandomAccessFile file;
+			if (lsm.fullyRead) return;
 			try {
-				file =
+				final RandomAccessFile file =
 					new RandomAccessFile(new File(lsm.directory +
 						System.getProperty("file.separator") + lsm.fileName), "r");
 				final RandomAccessStream stream = new RandomAccessStream(file);
@@ -167,11 +167,11 @@ public class Reader {
 
 	public boolean isLSMfile(final RandomAccessStream stream) {
 		boolean identifier = false;
-		long ID = 0;
+		long ID = 0L;
 		try {
 			stream.seek(2);
 			ID = ReaderToolkit.swap(stream.readShort());
-			if (ID == 42) identifier = true;
+			if (ID == 42L) identifier = true;
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
@@ -184,16 +184,15 @@ public class Reader {
 	{
 		final CZLSMInfoExtended cz = new CZLSMInfoExtended();
 		try {
-			if (position == 0) return cz;
+			if (position == 0L) return cz;
 			stream.seek((int) position + 8);
 
 			cz.DimensionX = ReaderToolkit.swap(stream.readInt());
 			cz.DimensionY = ReaderToolkit.swap(stream.readInt());
 			cz.DimensionZ = ReaderToolkit.swap(stream.readInt());
 
-			// number of channels
 			cz.DimensionChannels = ReaderToolkit.swap(stream.readInt());
-			// Timestack size
+
 			cz.DimensionTime = ReaderToolkit.swap(stream.readInt());
 
 			cz.IntensityDataType = ReaderToolkit.swap(stream.readInt());
@@ -244,36 +243,36 @@ public class Reader {
 			cz.OffsetChannelFactors = ReaderToolkit.swap(stream.readInt());
 			cz.ObjectiveSphereCorrection = ReaderToolkit.swap(stream.readInt());
 			cz.OffsetUnmixParameters = ReaderToolkit.swap(stream.readInt());
-			// not reading reserved ... should be 72 words
-			if (cz.OffsetChannelDataTypes != 0) {
+
+			if (cz.OffsetChannelDataTypes != 0L) {
 				cz.OffsetChannelDataTypesValues =
 					getOffsetChannelDataTypesValues(stream, cz.OffsetChannelDataTypes,
 						cz.DimensionChannels);
 			}
-			if (cz.OffsetChannelColors != 0) {
+			if (cz.OffsetChannelColors != 0L) {
 				final ChannelNamesAndColors channelNamesAndColors =
 					getChannelNamesAndColors(stream, cz.OffsetChannelColors,
 						cz.DimensionChannels);
 				cz.channelNamesAndColors = channelNamesAndColors;
 			}
-			if (cz.OffsetChannelWavelength != 0) {
+			if (cz.OffsetChannelWavelength != 0L) {
 				cz.channelWavelength =
 					getLambdaStamps(stream, cz.OffsetChannelWavelength);
 			}
 
-			if (cz.OffsetTimeStamps != 0) {
+			if (cz.OffsetTimeStamps != 0L) {
 				cz.timeStamps = getTimeStamps(stream, cz.OffsetTimeStamps);
-				if ((cz.ScanType == 3) || (cz.ScanType == 4) || (cz.ScanType == 5) ||
-					(cz.ScanType == 6) || (cz.ScanType == 9) || (cz.ScanType == 10))
+				if (((cz.ScanType == 3) || (cz.ScanType == 4) || (cz.ScanType == 5) ||
+					(cz.ScanType == 6) || (cz.ScanType == 9) || (cz.ScanType == 10)) &&
+					(cz.OffsetEventList != 0L))
 				{
-					if (cz.OffsetEventList != 0) cz.eventList =
+					cz.eventList =
 						getEventList(stream, cz.OffsetEventList,
 							cz.timeStamps.FirstTimeStamp);
 				}
 			}
-			if (cz.OffsetScanInformation != 0) {
-				if (!thumb) cz.scanInfo = getScanInfo(stream, cz.OffsetScanInformation);
-			}
+			if ((cz.OffsetScanInformation != 0L) && (!thumb)) cz.scanInfo =
+				getScanInfo(stream, cz.OffsetScanInformation);
 		}
 		catch (final IOException getCZ_LSMINFO_exception) {
 			getCZ_LSMINFO_exception.printStackTrace();
@@ -289,9 +288,8 @@ public class Reader {
 		try {
 			stream.seek((int) position);
 
-			for (int i = 0; i < channelCount; i++) {
+			for (int i = 0; i < channelCount; i++)
 				OffsetChannelDataTypesValues[i] = ReaderToolkit.swap(stream.readInt());
-			}
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
@@ -313,11 +311,10 @@ public class Reader {
 			channelNamesAndColors.ColorsOffset = ReaderToolkit.swap(stream.readInt());
 			channelNamesAndColors.NamesOffset = ReaderToolkit.swap(stream.readInt());
 			channelNamesAndColors.Mono = ReaderToolkit.swap(stream.readInt());
-			// reserved 4 words
+
 			stream.seek((int) channelNamesAndColors.NamesOffset + (int) position);
 			channelNamesAndColors.ChannelNames = new String[(int) channelCount];
-			// long Namesize = channelNamesAndColors.BlockSize-
-			// channelNamesAndColors.NamesOffset;
+
 			for (int j = 0; j < channelCount; j++) {
 				final long size = ReaderToolkit.swap(stream.readInt());
 				channelNamesAndColors.ChannelNames[j] =
@@ -325,11 +322,10 @@ public class Reader {
 			}
 			stream.seek((int) channelNamesAndColors.ColorsOffset + (int) position);
 			channelNamesAndColors.Colors =
-				new int[(int) (channelNamesAndColors.NumberColors)];
+				new int[(int) channelNamesAndColors.NumberColors];
 
-			for (int j = 0; j < (int) (channelNamesAndColors.NumberColors); j++) {
+			for (int j = 0; j < (int) channelNamesAndColors.NumberColors; j++)
 				channelNamesAndColors.Colors[j] = ReaderToolkit.swap(stream.readInt());
-			}
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
@@ -352,10 +348,11 @@ public class Reader {
 				timeStamps.Stamps[i] = ReaderToolkit.swap(stream.readDouble());
 			}
 			for (int i = 1; i < timeStamps.NumberTimeStamps; i++) {
-				timeStamps.TimeStamps[i] = timeStamps.Stamps[i] - timeStamps.Stamps[0];
+				timeStamps.TimeStamps[i] =
+					(timeStamps.Stamps[i] - timeStamps.Stamps[0]);
 			}
 			timeStamps.FirstTimeStamp = timeStamps.Stamps[0];
-			timeStamps.TimeStamps[0] = 0;
+			timeStamps.TimeStamps[0] = 0.0D;
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
@@ -383,7 +380,7 @@ public class Reader {
 				channelWavelength.EndWavelength[i] =
 					ReaderToolkit.swap(stream.readDouble());
 				channelWavelength.LambdaStamps[i] =
-					(channelWavelength.StartWavelength[i] + channelWavelength.EndWavelength[i]) / 2;
+					((channelWavelength.StartWavelength[i] + channelWavelength.EndWavelength[i]) / 2.0D);
 			}
 		}
 		catch (final IOException getLAMBDASTAMPS_exception) {
@@ -406,7 +403,7 @@ public class Reader {
 			eventList.NumberEvents = ReaderToolkit.swap(stream.readInt());
 			eventList.events = new Event[(int) eventList.NumberEvents];
 			pointer = stream.getFilePointer();
-			if (eventList.NumberEvents > 0) for (int i = 0; i < eventList.NumberEvents; i++)
+			if (eventList.NumberEvents > 0L) for (int i = 0; i < eventList.NumberEvents; i++)
 			{
 				eventList.events[i] = new Event();
 				eventList.events[i].SizeEventListEntry =
@@ -414,40 +411,40 @@ public class Reader {
 				eventList.events[i].Time = ReaderToolkit.swap(stream.readDouble());
 				eventList.events[i].EventType = ReaderToolkit.swap(stream.readInt());
 				switch ((int) eventList.events[i].EventType) {
-					case (0):
+					case 0:
 						EventType = "Marker";
 						break;
-					case (1):
+					case 1:
 						EventType = "Timer Change";
 						break;
-					case (2):
+					case 2:
 						EventType = "Bleach Start";
 						break;
-					case (3):
+					case 3:
 						EventType = "Bleach Stop";
 						break;
-					case (4):
+					case 4:
 						EventType = "Trigger";
 						break;
 					default:
 						EventType = "Unknown";
-						break;
 				}
+
 				ReaderToolkit.swap(stream.readInt());
-				EventDescription +=
-					IJ.d2s(eventList.events[i].Time - firstTimeStamp) + "\t" + EventType +
-						"\t";
+				EventDescription =
+					EventDescription + IJ.d2s(eventList.events[i].Time - firstTimeStamp) +
+						"\t" + EventType + "\t";
 				EventNote =
 					ReaderToolkit.readNULLASCII2(stream,
-						eventList.events[i].SizeEventListEntry - 16);
+						eventList.events[i].SizeEventListEntry - 16L);
 				pointer += (int) eventList.events[i].SizeEventListEntry;
 				stream.seek(pointer);
-				EventDescription += EventNote + "\n";
+				EventDescription = EventDescription + EventNote + "\n";
 			}
 			eventList.Description = EventDescription;
 		}
 		catch (final IOException getEVENTLIST_exception) {
-			IJ.log("IOException \n" + "Last Offset: " + IJ.d2s(position, 0));
+			IJ.log("IOException \nLast Offset: " + IJ.d2s(position, 0));
 			getEVENTLIST_exception.printStackTrace();
 		}
 		return eventList;
@@ -460,27 +457,27 @@ public class Reader {
 		ScanInfoTag tag = new ScanInfoTag();
 		try {
 			stream.seek((int) position);
-			while (tag.entry != 0x0FFFFFFFF) {
+			while (tag.entry != -1L) {
 				tag = getScanInfoTag(stream);
 				if (Recording.isRecording(tag.entry)) {
 					final Recording recording = new Recording();
-					while (tag.entry != 0x0FFFFFFFF) {
+					while (tag.entry != -1L) {
 						tag = getScanInfoTag(stream);
 						if (Laser.isLasers(tag.entry)) {
 							recording.lasers = getLaserBlock(stream);
-							tag.entry = 0;
+							tag.entry = 0L;
 						}
 						if (Track.isTracks(tag.entry)) {
 							recording.tracks = getTrackBlock(stream);
-							tag.entry = 0;
+							tag.entry = 0L;
 						}
-						if (Marker.isMarkers((tag.entry))) {
+						if (Marker.isMarkers(tag.entry)) {
 							recording.markers = getMarkerBlock(stream);
-							tag.entry = 0;
+							tag.entry = 0L;
 						}
 						if (Timer.isTimers(tag.entry)) {
 							recording.timers = getTimerBlock(stream);
-							tag.entry = 0;
+							tag.entry = 0L;
 						}
 						recording.records =
 							getRecords(stream, tag, Recording.data, recording.records);
@@ -498,191 +495,191 @@ public class Reader {
 	private Laser[] getLaserBlock(final RandomAccessStream stream) {
 		ScanInfoTag tag = new ScanInfoTag();
 		if (IJ.debugMode) IJ.log("Lasers");
-		final Vector<Laser> v = new Vector<Laser>();
-		while (tag.entry != 0x0FFFFFFFF) {
+		final Vector v = new Vector();
+		while (tag.entry != -1L) {
 			tag = getScanInfoTag(stream);
 			if (Laser.isLaser(tag.entry)) {
 				final Laser l = new Laser();
-				while (tag.entry != 0x0FFFFFFFF) {
+				while (tag.entry != -1L) {
 					tag = getScanInfoTag(stream);
 					if (IJ.debugMode) IJ.log("Lasertag: " + Long.toHexString(tag.entry));
-					if (tag.entry != 0x0FFFFFFFF) l.records =
+					if (tag.entry != -1L) l.records =
 						getRecords(stream, tag, l.data, l.records);
 				}
 				v.add(l);
-				tag.entry = 0;
-
+				tag.entry = 0L;
 			}
 
 		}
-		return v.toArray(new Laser[v.size()]);
 
+		return (Laser[]) v.toArray(new Laser[v.size()]);
 	}
 
 	private IlluminationChannel[] getIlluminationBlock(
 		final RandomAccessStream stream)
 	{
 		ScanInfoTag tag = new ScanInfoTag();
-		final Vector<IlluminationChannel> vdc = new Vector<IlluminationChannel>();
-		while (tag.entry != 0x0FFFFFFFF) {
+		final Vector vdc = new Vector();
+		while (tag.entry != -1L) {
 			tag = getScanInfoTag(stream);
 
 			if (IlluminationChannel.isIlluminationChannel(tag.entry)) {
 				final IlluminationChannel ic = new IlluminationChannel();
 
-				while (tag.entry != 0x0FFFFFFFF) {
+				while (tag.entry != -1L) {
 					tag = getScanInfoTag(stream);
 					ic.records = getRecords(stream, tag, ic.data, ic.records);
 				}
 				vdc.add(ic);
-				tag.entry = 0;
+				tag.entry = 0L;
 			}
-
 		}
-		return vdc.toArray(new IlluminationChannel[vdc.size()]);
+
+		return (IlluminationChannel[]) vdc.toArray(new IlluminationChannel[vdc
+			.size()]);
 	}
 
 	private Track[] getTrackBlock(final RandomAccessStream stream) {
 		ScanInfoTag tag = new ScanInfoTag();
-		final Vector<Track> v = new Vector<Track>();
+		final Vector v = new Vector();
 		int tracksnum = 0;
-		while (tag.entry != 0x0FFFFFFFF) {
+		while (tag.entry != -1L) {
 			tag = getScanInfoTag(stream);
 			if (Track.isTrack(tag.entry)) {
 				tracksnum++;
 				final Track t = new Track();
-				while (tag.entry != 0x0FFFFFFFF) {
+				while (tag.entry != -1L) {
 					tag = getScanInfoTag(stream);
 
-					if (IJ.debugMode) IJ.log("Tracktag: " + Long.toHexString(tag.entry));
-
+					if (IJ.debugMode) {
+						IJ.log("Tracktag: " + Long.toHexString(tag.entry));
+					}
 					if (IlluminationChannel.isIlluminationChannels(tag.entry)) {
 						t.illuminationChannels = getIlluminationBlock(stream);
-						tag.entry = 0;
+						tag.entry = 0L;
 					}
 					if (DetectionChannel.isDetectionChannels(tag.entry)) {
 						t.detectionChannels = getDetectionChannelBlock(stream);
-						tag.entry = 0;
+						tag.entry = 0L;
 					}
 					if (BeamSplitter.isBeamSplitters(tag.entry)) {
 						t.beamSplitters = getBeamSplitterBlock(stream);
-						tag.entry = 0;
+						tag.entry = 0L;
 					}
 					if (DataChannel.isDataChannels(tag.entry)) {
 						t.dataChannels = getDataChannelBlock(stream);
-						tag.entry = 0;
+						tag.entry = 0L;
 					}
 
-					if (tag.entry != 0x0FFFFFFFF) t.records =
-						getRecords(stream, tag, t.data, t.records);
-
+					if (tag.entry != -1L) {
+						t.records = getRecords(stream, tag, t.data, t.records);
+					}
 				}
 				v.add(t);
-				tag.entry = 0;
+				tag.entry = 0L;
 			}
 		}
-		return v.toArray(new Track[v.size()]);
+		return (Track[]) v.toArray(new Track[v.size()]);
 	}
 
 	private DetectionChannel[] getDetectionChannelBlock(
 		final RandomAccessStream stream)
 	{
 		ScanInfoTag tag = new ScanInfoTag();
-		final Vector<DetectionChannel> vdc = new Vector<DetectionChannel>();
-		while (tag.entry != 0x0FFFFFFFF) {
+		final Vector vdc = new Vector();
+		while (tag.entry != -1L) {
 			tag = getScanInfoTag(stream);
 			if (DetectionChannel.isDetectionChannel(tag.entry)) {
 				final DetectionChannel ic = new DetectionChannel();
-				while (tag.entry != 0x0FFFFFFFF) {
+				while (tag.entry != -1L) {
 					tag = getScanInfoTag(stream);
 					ic.records = getRecords(stream, tag, ic.data, ic.records);
 				}
 				vdc.add(ic);
-				tag.entry = 0;
+				tag.entry = 0L;
 			}
 		}
 		final DetectionChannel[] dc = new DetectionChannel[vdc.size()];
 		for (int i = 0; i < vdc.size(); i++) {
-			dc[i] = vdc.get(i);
+			dc[i] = ((DetectionChannel) vdc.get(i));
 		}
 		return dc;
 	}
 
 	private BeamSplitter[] getBeamSplitterBlock(final RandomAccessStream stream) {
 		ScanInfoTag tag = new ScanInfoTag();
-		final Vector<BeamSplitter> vdc = new Vector<BeamSplitter>();
-		while (tag.entry != 0x0FFFFFFFF) {
+		final Vector vdc = new Vector();
+		while (tag.entry != -1L) {
 			tag = getScanInfoTag(stream);
 			if (BeamSplitter.isBeamSplitter(tag.entry)) {
 				final BeamSplitter ic = new BeamSplitter();
-				while (tag.entry != 0x0FFFFFFFF) {
+				while (tag.entry != -1L) {
 					tag = getScanInfoTag(stream);
 					ic.records = getRecords(stream, tag, ic.data, ic.records);
 				}
 				vdc.add(ic);
-				tag.entry = 0;
+				tag.entry = 0L;
 			}
-
 		}
-		return vdc.toArray(new BeamSplitter[vdc.size()]);
+
+		return (BeamSplitter[]) vdc.toArray(new BeamSplitter[vdc.size()]);
 	}
 
 	private Marker[] getMarkerBlock(final RandomAccessStream stream) {
 		ScanInfoTag tag = new ScanInfoTag();
-		final Vector<Marker> v = new Vector<Marker>();
-		while (tag.entry != 0x0FFFFFFFF) {
+		final Vector v = new Vector();
+		while (tag.entry != -1L) {
 			tag = getScanInfoTag(stream);
 			if (Marker.isMarker(tag.entry)) {
 				final Marker m = new Marker();
-				while (tag.entry != 0x0FFFFFFFF) {
+				while (tag.entry != -1L) {
 					tag = getScanInfoTag(stream);
 					m.records = getRecords(stream, tag, m.data, m.records);
 				}
 				v.add(m);
-				tag.entry = 0;
+				tag.entry = 0L;
 			}
 		}
-		return v.toArray(new Marker[v.size()]);
+		return (Marker[]) v.toArray(new Marker[v.size()]);
 	}
 
 	private Timer[] getTimerBlock(final RandomAccessStream stream) {
 		ScanInfoTag tag = new ScanInfoTag();
-		final Vector<Timer> v = new Vector<Timer>();
-		while (tag.entry != 0x0FFFFFFFF) {
+		final Vector v = new Vector();
+		while (tag.entry != -1L) {
 			tag = getScanInfoTag(stream);
 			if (Timer.isTimer(tag.entry)) {
 				final Timer t = new Timer();
 
-				while (tag.entry != 0x0FFFFFFFF) {
+				while (tag.entry != -1L) {
 					tag = getScanInfoTag(stream);
 					t.records = getRecords(stream, tag, t.data, t.records);
 				}
 				v.add(t);
-				tag.entry = 0;
+				tag.entry = 0L;
 			}
 		}
-		return v.toArray(new Timer[v.size()]);
+		return (Timer[]) v.toArray(new Timer[v.size()]);
 	}
 
 	private DataChannel[] getDataChannelBlock(final RandomAccessStream stream) {
 		ScanInfoTag tag = new ScanInfoTag();
-		final Vector<DataChannel> vdc = new Vector<DataChannel>();
+		final Vector vdc = new Vector();
 
-		while (tag.entry != 0x0FFFFFFFF) {
+		while (tag.entry != -1L) {
 			tag = getScanInfoTag(stream);
 			if (DataChannel.isDataChannel(tag.entry)) {
 				final DataChannel ic = new DataChannel();
-				while (tag.entry != 0x0FFFFFFFF) {
-
+				while (tag.entry != -1L) {
 					tag = getScanInfoTag(stream);
 					ic.records = getRecords(stream, tag, ic.data, ic.records);
 				}
 				vdc.add(ic);
-				tag.entry = 0;
+				tag.entry = 0L;
 			}
-
 		}
-		return vdc.toArray(new DataChannel[vdc.size()]);
+
+		return (DataChannel[]) vdc.toArray(new DataChannel[vdc.size()]);
 	}
 
 	private LinkedHashMap<String, Object> getRecords(
@@ -691,28 +688,28 @@ public class Reader {
 	{
 		try {
 			String value = "";
-			long l = 0;
-			double d = 0;
+			long l = 0L;
+			double d = 0.0D;
 			final long position = stream.getFilePointer();
-			if (tag.type == 2) value =
+			if (tag.type == 2L) value =
 				ReaderToolkit.readSizedNULLASCII(stream, tag.size);
-			if (tag.type == 4) l = ReaderToolkit.swap(stream.readInt());
-			if (tag.type == 5) d = ReaderToolkit.swap(stream.readDouble());
+			if (tag.type == 4L) l = ReaderToolkit.swap(stream.readInt());
+			if (tag.type == 5L) d = ReaderToolkit.swap(stream.readDouble());
 			for (int i = 0; i < data.length; i++) {
 				if (((Long) data[i][0]).longValue() == tag.entry) {
-					if (tag.type == 2) {
+					if (tag.type == 2L) {
 						if (IJ.debugMode) IJ.log("Tag recognized: [" +
 							Long.toHexString(tag.entry) + "] -->" + (String) data[i][2]);
 						lhm.put((String) data[i][2], value);
 						return lhm;
 					}
-					if (tag.type == 4) {
+					if (tag.type == 4L) {
 						lhm.put((String) data[i][2], new Long(l));
 						if (IJ.debugMode) IJ.log("Tag recognized: [" +
 							Long.toHexString(tag.entry) + "] -->" + (String) data[i][2]);
 						return lhm;
 					}
-					if (tag.type == 5) {
+					if (tag.type == 5L) {
 						lhm.put((String) data[i][2], new Double(d));
 						if (IJ.debugMode) IJ.log("Tag recognized: [" +
 							Long.toHexString(tag.entry) + "] -->" + (String) data[i][2]);
@@ -720,10 +717,10 @@ public class Reader {
 					}
 				}
 			}
-			if (tag.type == 2) lhm.put("<UNKNOWN@" + (position - 12) + ">", value);
-			if (tag.type == 4) lhm.put("<UNKNOWN@" + (position - 12) + ">", new Long(
-				l));
-			if (tag.type == 5) lhm.put("<UNKNOWN@" + (position - 12) + ">",
+			if (tag.type == 2L) lhm.put("<UNKNOWN@" + (position - 12L) + ">", value);
+			if (tag.type == 4L) lhm.put("<UNKNOWN@" + (position - 12L) + ">",
+				new Long(l));
+			if (tag.type == 5L) lhm.put("<UNKNOWN@" + (position - 12L) + ">",
 				new Double(d));
 		}
 		catch (final IOException e) {
@@ -739,7 +736,7 @@ public class Reader {
 			final int s2 = stream.read();
 			final int s3 = stream.read();
 			final int s4 = stream.read();
-			sit.entry = (s4 << 24) + (s2 << 16) + (s3 << 8) + s1;
+			sit.entry = ((s4 << 24) + (s2 << 16) + (s3 << 8) + s1);
 			sit.type = ReaderToolkit.swap(stream.readInt());
 			sit.size = ReaderToolkit.swap(stream.readInt());
 		}
@@ -750,17 +747,14 @@ public class Reader {
 		return sit;
 	}
 
-	/**
-	 * *************************************************************************
-	 * ******************
-	 */
 	private class ScanInfoTag {
 
-		public long entry = 0;
+		public long entry = 0L;
 
-		public long type = 0;
+		public long type = 0L;
 
-		public long size = 0;
+		public long size = 0L;
+
+		private ScanInfoTag() {}
 	}
-
 }

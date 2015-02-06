@@ -7,40 +7,27 @@ import org.imagearchive.lsm.toolbox.gui.InfoFrame;
 
 public class ServiceMediator {
 
-	// private static MasterModel masterModel;
-
 	private static ControlPanelFrame controlPanelFrame;
-
 	private static InfoFrame infoFrame;
-
 	private static DetailsFrame detailsFrame;
-
 	private static Reader reader;
 
-	/*public static MasterModel getMasterModel() {
-		return masterModel.getMaster.;
-	}
-
-	public static void registerMasterModel(MasterModel masterModel) {
-		ServiceMediator.masterModel = masterModel;
-	}*/
-
-	public static void registerReader(final Reader reader) {
-		ServiceMediator.reader = reader;
+	public static void registerReader(Reader reader) {
+		reader = reader;
 	}
 
 	public static void registerControlPanelFrame(
-		final ControlPanelFrame controlPanelFrame)
+		ControlPanelFrame controlPanelFrame)
 	{
-		ServiceMediator.controlPanelFrame = controlPanelFrame;
+		controlPanelFrame = controlPanelFrame;
 	}
 
-	public static void registerInfoFrame(final InfoFrame infoFrame) {
-		ServiceMediator.infoFrame = infoFrame;
+	public static void registerInfoFrame(InfoFrame infoFrame) {
+		infoFrame = infoFrame;
 	}
 
-	public static void registerDetailsFrame(final DetailsFrame detailsFrame) {
-		ServiceMediator.detailsFrame = detailsFrame;
+	public static void registerDetailsFrame(DetailsFrame detailsFrame) {
+		detailsFrame = detailsFrame;
 	}
 
 	public static ControlPanelFrame getControlPanelFrame() {

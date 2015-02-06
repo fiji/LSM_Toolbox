@@ -39,11 +39,8 @@ import org.imagearchive.lsm.toolbox.info.scaninfo.Recording;
 public class InfoFrame extends JFrame {
 
 	private final MasterModel masterModel = MasterModel.getMasterModel();
-
 	private final DetailsFrame detailsFrame;
-
 	private final NotesDialog notesDialog;
-
 	private final int infoFrameXsize = 300;
 
 	private final int infoFrameYsize = 400;
@@ -53,16 +50,15 @@ public class InfoFrame extends JFrame {
 	private final JTextArea[] area = new JTextArea[22];
 
 	public InfoFrame() throws HeadlessException {
-		super();
-		detailsFrame = new DetailsFrame();
-		notesDialog = new NotesDialog(this, true);
+		this.detailsFrame = new DetailsFrame();
+		this.notesDialog = new NotesDialog(this, true);
 		initializeGUI();
 		ServiceMediator.registerInfoFrame(this);
 	}
 
 	public void initializeGUI() {
 		setTitle("General file information");
-		setSize(infoFrameXsize, infoFrameYsize);
+		setSize(this.infoFrameXsize, this.infoFrameYsize);
 		getContentPane().setLayout(new BorderLayout());
 		final String[] infolabels = new String[19];
 		infolabels[0] = "File Name";
@@ -86,18 +82,18 @@ public class InfoFrame extends JFrame {
 		infolabels[18] = "Plane spacing";
 		final JPanel infopanel = new JPanel(new GridLayout(19, 2, 3, 3));
 		Font dafont = new Font(null);
-		final float fontsize = 11;
+		final float fontsize = 11.0F;
 		dafont = dafont.deriveFont(fontsize);
-		final Font dafontbold = dafont.deriveFont(Font.BOLD);
+		final Font dafontbold = dafont.deriveFont(1);
 
 		for (int i = 0; i < 19; i++) {
-			infolab[i] = new JLabel("  " + infolabels[i]);
-			infolab[i].setFont(dafontbold);
-			infopanel.add(infolab[i]);
-			area[i] = new JTextArea("");
-			area[i].setEditable(false);
-			area[i].setFont(dafont);
-			infopanel.add(area[i]);
+			this.infolab[i] = new JLabel("  " + infolabels[i]);
+			this.infolab[i].setFont(dafontbold);
+			infopanel.add(this.infolab[i]);
+			this.area[i] = new JTextArea("");
+			this.area[i].setEditable(false);
+			this.area[i].setFont(dafont);
+			infopanel.add(this.area[i]);
 		}
 
 		final JButton details_button =
@@ -127,29 +123,27 @@ public class InfoFrame extends JFrame {
 		buttonPanel.add(dumpinfos_button);
 		buttonPanel.add(details_button);
 
-		getContentPane().add(buttonPanel, BorderLayout.NORTH);
-		getContentPane().add(infopanel, BorderLayout.CENTER);
+		getContentPane().add(buttonPanel, "North");
+		getContentPane().add(infopanel, "Center");
 
 		addWindowFocusListener(new WindowFocusListener() {
 
 			@Override
 			public void windowGainedFocus(final WindowEvent e) {
-
-				updateInfoFrame();
+				InfoFrame.this.updateInfoFrame();
 			}
 
 			@Override
 			public void windowLostFocus(final WindowEvent e) {}
 		});
-
 		addWindowListener(new WindowAdapter() {
 
 			@Override
 			public void windowClosed(final WindowEvent evt) {
-				if (detailsFrame != null) detailsFrame.dispose();
+				if (InfoFrame.this.detailsFrame != null) InfoFrame.this.detailsFrame
+					.dispose();
 			}
 		});
-
 		updateInfoFrame();
 		pack();
 		centerWindow();
@@ -158,9 +152,8 @@ public class InfoFrame extends JFrame {
 	public void updateInfoFrame() {
 		final String[] str = getInfo();
 		if (str == null) return;
-		for (int i = 0; i < 19; i++) {
-			if (str[i] != null) area[i].setText(str[i]);
-		}
+		for (int i = 0; i < 19; i++)
+			if (str[i] != null) this.area[i].setText(str[i]);
 	}
 
 	private void addDumpInfosListener(final JButton button, final JFrame parent) {
@@ -168,7 +161,7 @@ public class InfoFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				dumpInfo();
+				InfoFrame.this.dumpInfo();
 			}
 		});
 	}
@@ -182,7 +175,7 @@ public class InfoFrame extends JFrame {
 				if (imp == null) {
 					IJ.error("No open images.");
 					return;
-				};
+				}
 				final Reader reader = ServiceMediator.getReader();
 				reader.updateMetadata(imp);
 				final LSMFileInfo openLSM = (LSMFileInfo) imp.getOriginalFileInfo();
@@ -198,7 +191,9 @@ public class InfoFrame extends JFrame {
 							(String) null, 400, 200);
 					tw.append(events.Description);
 				}
-				else IJ.error("No events defined in the LSM file.");
+				else {
+					IJ.error("No events defined in the LSM file.");
+				}
 			}
 		});
 	}
@@ -208,10 +203,9 @@ public class InfoFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				if (detailsFrame.isShowing() == false) {
-					detailsFrame.setVisible(true);
-				}
-				else detailsFrame.setVisible(false);
+				if (!InfoFrame.this.detailsFrame.isShowing()) InfoFrame.this.detailsFrame
+					.setVisible(true);
+				else InfoFrame.this.detailsFrame.setVisible(false);
 			}
 		});
 	}
@@ -223,11 +217,13 @@ public class InfoFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				if (notesDialog.isShowing() == false) {
-					notesDialog.setNotes();
-					notesDialog.setVisible(true);
+				if (!InfoFrame.this.notesDialog.isShowing()) {
+					InfoFrame.this.notesDialog.setNotes();
+					InfoFrame.this.notesDialog.setVisible(true);
 				}
-				else notesDialog.setVisible(false);
+				else {
+					InfoFrame.this.notesDialog.setVisible(false);
+				}
 			}
 		});
 	}
@@ -237,11 +233,11 @@ public class InfoFrame extends JFrame {
 		if (imp == null) return null;
 		final Reader reader = ServiceMediator.getReader();
 		reader.updateMetadata(imp);
-		if (imp.getOriginalFileInfo() instanceof LSMFileInfo) {
+		if ((imp.getOriginalFileInfo() instanceof LSMFileInfo)) {
 			final LSMFileInfo lsm = (LSMFileInfo) imp.getOriginalFileInfo();
 
-			final ArrayList<ImageDirectory> imageDirectories = lsm.imageDirectories;
-			final ImageDirectory imDir = (imageDirectories.get(0));
+			final ArrayList imageDirectories = lsm.imageDirectories;
+			final ImageDirectory imDir = (ImageDirectory) imageDirectories.get(0);
 			if (imDir == null) return null;
 			final CZLSMInfoExtended cz = (CZLSMInfoExtended) imDir.TIF_CZ_LSMINFO;
 			final String[] infos = new String[19];
@@ -276,10 +272,13 @@ public class InfoFrame extends JFrame {
 				case 10:
 					scantype = "Point mode";
 					break;
+				case 7:
+				case 8:
+				case 9:
 				default:
 					scantype = "UNKNOWN !";
-					break;
 			}
+
 			final Recording r = cz.scanInfo.recordings.get(0);
 			final String objective = (String) r.records.get("ENTRY_OBJECTIVE");
 			final String user = (String) r.records.get("USER");
@@ -292,14 +291,15 @@ public class InfoFrame extends JFrame {
 				((Double) r.records.get("PLANE_SPACING")).doubleValue();
 
 			final String voxelsize_x =
-				IJ.d2s(cz.VoxelSizeX * 1000000, 2) + " " + MasterModel.micrometer;
+				IJ.d2s(cz.VoxelSizeX * 1000000.0D, 2) + " " + MasterModel.micrometer;
 			final String voxelsize_y =
-				IJ.d2s(cz.VoxelSizeY * 1000000, 2) + " " + MasterModel.micrometer;
+				IJ.d2s(cz.VoxelSizeY * 1000000.0D, 2) + " " + MasterModel.micrometer;
 			final String voxelsize_z =
-				IJ.d2s(cz.VoxelSizeZ * 1000000, 2) + " " + MasterModel.micrometer;
+				IJ.d2s(cz.VoxelSizeZ * 1000000.0D, 2) + " " + MasterModel.micrometer;
 			final String timestacksize = IJ.d2s(cz.DimensionTime, 0);
 			final String plane_spacing =
-				IJ.d2s(planeSpacing * 1000000, 2) + " " + MasterModel.micrometer;;
+				IJ.d2s(planeSpacing * 1000000.0D, 2) + " " + MasterModel.micrometer;
+
 			final String plane_width =
 				IJ.d2s(cz.DimensionX * cz.VoxelSizeX, 2) + " " + MasterModel.micrometer;
 			final String plane_height =
@@ -361,12 +361,12 @@ public class InfoFrame extends JFrame {
 	}
 
 	public DetailsFrame getDetailsFrame() {
-		return detailsFrame;
+		return this.detailsFrame;
 	}
 
 	public void centerWindow() {
 		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((screenSize.width - this.getWidth()) / 2,
-			(screenSize.height - this.getHeight()) / 2);
+		setLocation((screenSize.width - getWidth()) / 2,
+			(screenSize.height - getHeight()) / 2);
 	}
 }

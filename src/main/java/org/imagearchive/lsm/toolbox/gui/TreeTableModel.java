@@ -25,13 +25,13 @@ class TreeTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(final int col) {
-		return columnNames[col].toString();
+		return this.columnNames[col].toString();
 	}
 
 	@Override
 	public int getRowCount() {
-		if (data == null) return 0;
-		return data.length;
+		if (this.data == null) return 0;
+		return this.data.length;
 	}
 
 	@Override
@@ -41,7 +41,7 @@ class TreeTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(final int row, final int col) {
-		return data[row][col];
+		return this.data[row][col];
 	}
 
 	@Override
@@ -51,36 +51,37 @@ class TreeTableModel extends AbstractTableModel {
 
 	@Override
 	public void setValueAt(final Object value, final int row, final int col) {
-		data[row][col] = value;
+		this.data[row][col] = value;
 		fireTableCellUpdated(row, col);
 	}
 
 	public void setData(LinkedHashMap<String, Object> dataMap) {
 		if (dataMap != null) {
-			if (filtered) dataMap = getFilteredMap(dataMap);
-			final Iterator<String> iterator = dataMap.keySet().iterator();
-			String tag;
-			data = new Object[dataMap.size()][2];
+			if (this.filtered) dataMap = getFilteredMap(dataMap);
+			final Iterator iterator = dataMap.keySet().iterator();
+
+			this.data = new Object[dataMap.size()][2];
 			for (int i = 0; iterator.hasNext(); i++) {
-				tag = iterator.next();
-				data[i][0] = tag;
-				data[i][1] = dataMap.get(tag);
+				final String tag = (String) iterator.next();
+				this.data[i][0] = tag;
+				this.data[i][1] = dataMap.get(tag);
 			}
 		}
-		else data = null;
+		else {
+			this.data = null;
+		}
 		fireTableDataChanged();
 	}
 
 	public LinkedHashMap<String, Object> getFilteredMap(
 		final LinkedHashMap<String, Object> dataMap)
 	{
-		final LinkedHashMap<String, Object> filteredMap =
-			new LinkedHashMap<String, Object>();
-		final Iterator<String> iterator = dataMap.keySet().iterator();
-		String tag;
-		data = new Object[dataMap.size()][2];
+		final LinkedHashMap filteredMap = new LinkedHashMap();
+		final Iterator iterator = dataMap.keySet().iterator();
+
+		this.data = new Object[dataMap.size()][2];
 		for (int i = 0; iterator.hasNext(); i++) {
-			tag = iterator.next();
+			final String tag = (String) iterator.next();
 			if (tag.indexOf("<UNKNOWN@") == -1) filteredMap
 				.put(tag, dataMap.get(tag));
 		}
@@ -92,6 +93,6 @@ class TreeTableModel extends AbstractTableModel {
 	}
 
 	public boolean getFiltered() {
-		return filtered;
+		return this.filtered;
 	}
 }

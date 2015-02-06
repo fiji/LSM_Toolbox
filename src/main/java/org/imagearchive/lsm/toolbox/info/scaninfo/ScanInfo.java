@@ -5,5 +5,5 @@ import java.util.ArrayList;
 
 public class ScanInfo {
 
-	public ArrayList<Recording> recordings = new ArrayList<Recording>();
+	public ArrayList<Recording> recordings = new ArrayList();
 }

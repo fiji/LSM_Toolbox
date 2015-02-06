@@ -15,9 +15,10 @@ public class BatchFilter extends FileFilter {
 
 		final String extension = getExtension(f);
 		if (extension != null) {
-			if (extension.equals("csv")) return true;
-			else return false;
-
+			if (extension.equals("csv")) {
+				return true;
+			}
+			return false;
 		}
 
 		return false;
@@ -33,7 +34,7 @@ public class BatchFilter extends FileFilter {
 		final String s = f.getName();
 		final int i = s.lastIndexOf('.');
 
-		if (i > 0 && i < s.length() - 1) {
+		if ((i > 0) && (i < s.length() - 1)) {
 			ext = s.substring(i + 1).toLowerCase();
 		}
 		return ext;

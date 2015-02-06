@@ -12,17 +12,11 @@ import java.io.InputStreamReader;
 
 public class MasterModel {
 
-	// private ServiceMediator serviceMediator;
-
-	// private Reader reader;
-
 	private static MasterModel masterModel;
-
 	public static final String VERSION = "4.0g";
-
 	public static boolean debugMode = false;
 
-	public static char micro = '\u00b5';
+	public static char micro = '�';
 
 	public static String micrometer = micro + "m";
 
@@ -36,10 +30,8 @@ public class MasterModel {
 
 	public String[] supportedBatchTypes = { "Tiff", "8-bit Tiff", "Jpeg", "Zip",
 		"Raw" };
-
 	public String[] macroFiles = { "magic_montage.txt" };
-
-	public String[] macros = new String[macroFiles.length];
+	public String[] macros = new String[this.macroFiles.length];
 
 	public static MasterModel getMasterModel() {
 		if (masterModel == null) masterModel = new MasterModel();
@@ -52,16 +44,13 @@ public class MasterModel {
 		readMacros();
 	}
 
-	public void initializeModel() {
-		// serviceMediator = new ServiceMediator();
-		// reader = new Reader();
-	}
+	public void initializeModel() {}
 
 	public void readMacros() {
-		for (int i = 0; i < macroFiles.length; i++) {
+		for (int i = 0; i < this.macroFiles.length; i++) {
 			final InputStream in =
 				getClass().getClassLoader().getResourceAsStream(
-					"org/imagearchive/lsm/toolbox/macros/" + macroFiles[i]);
+					"org/imagearchive/lsm/toolbox/macros/" + this.macroFiles[i]);
 			try {
 				if (in == null) throw new IOException();
 				final BufferedReader reader =
@@ -71,11 +60,11 @@ public class MasterModel {
 				while ((line = reader.readLine()) != null) {
 					macroBuffer.append(line + "\n");
 				}
-				macros[i] = macroBuffer.toString();
+				this.macros[i] = macroBuffer.toString();
 				reader.close();
 			}
 			catch (final IOException e) {
-				macros[i] = null;
+				this.macros[i] = null;
 				IJ.error("Could not load internal macro.");
 			}
 		}
@@ -83,31 +72,29 @@ public class MasterModel {
 
 	private void registerServices() {}
 
-	/**
-	 * ***************************************************************************
-	 */
 	public String getVersion() {
-		return VERSION;
+		return "4.0g";
 	}
 
 	public String getMacro(final int i) {
-		if (i >= 0 && i < macros.length) return macros[i];
-		else return null;
+		if ((i >= 0) && (i < this.macros.length)) {
+			return this.macros[i];
+		}
+		return null;
 	}
 
 	public String getMagicMontaqe() {
 		final StringBuffer sb = new StringBuffer();
 		String ext_macro = null;
-		float ext_ver = 0.0f;
-		float int_ver = 0.0f;
+		float ext_ver = 0.0F;
+		float int_ver = 0.0F;
 		String int_macro = new String();
 		final String toolsSetDir =
 			IJ.getDirectory("macros") + File.separator + "toolsets";
-		BufferedReader input;
 		try {
 			final File f =
 				new File(toolsSetDir + File.separator + "magic_montage.txt");
-			input = new BufferedReader(new FileReader(f));
+			final BufferedReader input = new BufferedReader(new FileReader(f));
 			String line = null;
 			while ((line = input.readLine()) != null) {
 				sb.append(line);
@@ -115,24 +102,21 @@ public class MasterModel {
 			}
 			input.close();
 			ext_macro = sb.toString();
-
 		}
-		catch (final IOException e) {
-			// probably no magic montage
-		}
+		catch (final IOException localIOException) {}
 		if (ext_macro != null) try {
 			ext_ver =
 				Float.parseFloat(ext_macro.substring(
 					ext_macro.indexOf("//--version--") + 13, ext_macro.indexOf("\n")));
 		}
-		catch (final NumberFormatException e) {}
+		catch (final NumberFormatException localNumberFormatException) {}
 		int_macro = getMacro(0);
 		if (int_macro != null) try {
 			int_ver =
 				Float.parseFloat(int_macro.substring(
 					int_macro.indexOf("//--version--") + 13, int_macro.indexOf("\n")));
 		}
-		catch (final NumberFormatException e) {}
+		catch (final NumberFormatException localNumberFormatException1) {}
 		if (int_ver < ext_ver) return ext_macro;
 		return int_macro;
 	}

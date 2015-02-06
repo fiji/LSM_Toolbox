@@ -12,7 +12,6 @@ import javax.swing.table.AbstractTableModel;
 public class LsmImageTableModel extends AbstractTableModel {
 
 	public ArrayList<File> files;
-
 	public String[] columnTitles = { "Filename", "Size", "Last modifed" };
 
 	public LsmImageTableModel(final ArrayList<File> files) {
@@ -20,30 +19,30 @@ public class LsmImageTableModel extends AbstractTableModel {
 	}
 
 	public LsmImageTableModel() {
-		files = new ArrayList<File>();
+		this.files = new ArrayList();
 	}
 
 	@Override
 	public int getRowCount() {
-		return files.size();
+		return this.files.size();
 	}
 
 	@Override
 	public int getColumnCount() {
-		return columnTitles.length;
+		return this.columnTitles.length;
 	}
 
 	@Override
 	public String getColumnName(final int columnIndex) {
-		return columnTitles[columnIndex];
+		return this.columnTitles[columnIndex];
 	}
 
 	@Override
 	public Object getValueAt(final int row, final int col) {
-		final File file = files.get(row);
+		final File file = this.files.get(row);
 		if (col == 0) return file.getName();
 		if (col == 1) return new DecimalFormat("###.##")
-			.format(file.length() / 1024f) +
+			.format(file.length() / 1024.0F) +
 			" kbytes";
 		if (col == 2) return new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss")
 			.format(new Date(file.lastModified()));
@@ -56,34 +55,34 @@ public class LsmImageTableModel extends AbstractTableModel {
 	}
 
 	public void addFile(final File file) {
-		files.add(file);
+		this.files.add(file);
 		fireTableDataChanged();
 	}
 
 	public void removeFile(final int index) {
-		files.remove(index);
+		this.files.remove(index);
 		fireTableDataChanged();
 	}
 
 	public void removeFile(final int row, final int col) {
-		files.remove(row * columnTitles.length + col);
+		this.files.remove(row * this.columnTitles.length + col);
 		fireTableDataChanged();
 	}
 
 	public void removeAllFiles() {
-		files.removeAll(files);
+		this.files.removeAll(this.files);
 		fireTableDataChanged();
 	}
 
 	@Override
 	public void setValueAt(final Object object, final int row, final int col) {
-		files.set(row * columnTitles.length + col, (File) object);
+		this.files.set(row * this.columnTitles.length + col, (File) object);
 		fireTableDataChanged();
 		fireTableCellUpdated(row, col);
 	}
 
 	public void insertFile(final Object object, final int row, final int col) {
-		files.add(row * columnTitles.length + col, (File) object);
+		this.files.add(row * this.columnTitles.length + col, (File) object);
 		fireTableDataChanged();
 	}
 
@@ -92,10 +91,10 @@ public class LsmImageTableModel extends AbstractTableModel {
 	}
 
 	public File getFileAt(final int row, final int col) {
-		return files.get(row * columnTitles.length + col);
+		return this.files.get(row * this.columnTitles.length + col);
 	}
 
 	public ArrayList<File> getFiles() {
-		return files;
+		return this.files;
 	}
 }

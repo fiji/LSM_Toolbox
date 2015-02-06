@@ -5,22 +5,25 @@ import java.util.LinkedHashMap;
 
 public class Marker {
 
-	public LinkedHashMap<String, Object> records =
-		new LinkedHashMap<String, Object>();
+	public LinkedHashMap<String, Object> records = new LinkedHashMap();
 
 	public Object[][] data = {
-		{ new Long(0x014000001), DataType.STRING, "MARKER_NAME" },
-		{ new Long(0x014000002), DataType.STRING, "DESCRIPTION" },
-		{ new Long(0x014000003), DataType.STRING, "TRIGGER_IN" },
-		{ new Long(0x014000004), DataType.STRING, "TRIGGER_OUT" } };
+		{ new Long(335544321L), DataType.STRING, "MARKER_NAME" },
+		{ new Long(335544322L), DataType.STRING, "DESCRIPTION" },
+		{ new Long(335544323L), DataType.STRING, "TRIGGER_IN" },
+		{ new Long(335544324L), DataType.STRING, "TRIGGER_OUT" } };
 
 	public static boolean isMarkers(final long tagEntry) {
-		if (tagEntry == 0x013000000) return true;
-		else return false;
+		if (tagEntry == 318767104L) {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isMarker(final long tagEntry) {
-		if (tagEntry == 0x014000000) return true;
-		else return false;
+		if (tagEntry == 335544320L) {
+			return true;
+		}
+		return false;
 	}
 }

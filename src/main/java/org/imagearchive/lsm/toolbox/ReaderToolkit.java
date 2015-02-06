@@ -14,20 +14,19 @@ import java.io.IOException;
 public class ReaderToolkit {
 
 	public static short swap(final short x) {
-		return (short) ((x << 8) | ((x >> 8) & 0xff));
+		return (short) (x << 8 | x >> 8 & 0xFF);
 	}
 
 	public static char swap(final char x) {
-		return (char) ((x << 8) | ((x >> 8) & 0xff));
+		return (char) (x << '\b' | x >> '\b' & 0xFF);
 	}
 
 	public static int swap(final int x) {
-		return (swap((short) x) << 16) | (swap((short) (x >> 16)) & 0xffff);
+		return swap((short) x) << 16 | swap((short) (x >> 16)) & 0xFFFF;
 	}
 
 	public static long swap(final long x) {
-		return ((long) swap((int) (x)) << 32) |
-			(swap((int) (x >> 32)) & 0xffffffffL);
+		return swap((int) x) << 32 | swap((int) (x >> 32)) & 0xFFFFFFFF;
 	}
 
 	public static float swap(final float x) {
@@ -44,22 +43,21 @@ public class ReaderToolkit {
 		int offset = 0;
 		String tempstr = new String("");
 		int in = 0;
-		char ch;
+
 		boolean addchar = true;
 		try {
 			while (offset < s) {
 				in = stream.read();
 				if (in == -1) break;
-				ch = (char) in;
-				if (addchar == true) {
+				final char ch = (char) in;
+				if (addchar) {
 					final String achar = new Character(ch).toString();
-					if (ch != 0x00) tempstr += achar;
+					if (ch != 0) tempstr = tempstr + achar;
 					else addchar = false;
 				}
 				offset++;
 			}
 		}
-
 		catch (final IOException Read_ASCII_exception) {
 			Read_ASCII_exception.printStackTrace();
 		}
@@ -72,7 +70,7 @@ public class ReaderToolkit {
 		String rtn = "";
 		try {
 			for (int i = 0; i < length; i++)
-				rtn += (char) (stream.read());
+				rtn = rtn + (char) stream.read();
 		}
 		catch (final IOException Read_ASCII_exception) {
 			Read_ASCII_exception.printStackTrace();
@@ -84,12 +82,9 @@ public class ReaderToolkit {
 		String rtn = "";
 		try {
 			char ch;
-
 			do {
-				ch = (char) (stream.read());
-				if (ch != 0) {
-					rtn += ch;
-				}
+				ch = (char) stream.read();
+				if (ch != 0) rtn = rtn + ch;
 			}
 			while (ch != 0);
 		}
@@ -105,13 +100,12 @@ public class ReaderToolkit {
 		int offset = 0;
 		String tempstr = new String("");
 		int in = 0;
-		char ch;
 		try {
 			while (offset < s) {
 				in = stream.read();
 				if (in == -1) break;
-				ch = (char) in;
-				if (ch != 0) tempstr += Character.toString(ch);
+				final char ch = (char) in;
+				if (ch != 0) tempstr = tempstr + Character.toString(ch);
 				else return tempstr;
 				offset++;
 			}
@@ -121,11 +115,6 @@ public class ReaderToolkit {
 		}
 		return tempstr;
 	}
-
-	/*
-	* applyColors, applies color gradient; function taken out from Lut_Panel
-	* plugin
-	*/
 
 	public static void applyColors(final ImagePlus imp, final int channel,
 		final Color[] gc, final int i)
@@ -144,33 +133,34 @@ public class ReaderToolkit {
 		float idR = gc[1].getRed() - gc[0].getRed();
 		float idG = gc[1].getGreen() - gc[0].getGreen();
 		float idB = gc[1].getBlue() - gc[0].getBlue();
-		idR = (idR / interval);
-		idG = (idG / interval);
-		idB = (idB / interval);
+		idR /= interval;
+		idG /= interval;
+		idB /= interval;
 		int a = 0;
-		for (a = (int) (interval * 0); a < (int) (interval * (0) + interval); a++, iR +=
-			idR, iG += idG, iB += idB)
+		for (a = (int) (interval * 0.0F); a < (int) (interval * 0.0F + interval); iB +=
+			idB)
 		{
-			fi.reds[a] = (byte) (iR);
-			fi.greens[a] = (byte) (iG);
-			fi.blues[a] = (byte) (iB);
+			fi.reds[a] = ((byte) (int) iR);
+			fi.greens[a] = ((byte) (int) iG);
+			fi.blues[a] = ((byte) (int) iB);
+
+			a++;
+			iR += idR;
+			iG += idG;
 		}
-		final int b = (int) (interval * 0 + interval) - 1;
-		fi.reds[b] = (byte) (gc[1].getRed());
-		fi.greens[b] = (byte) (gc[1].getGreen());
-		fi.blues[b] = (byte) (gc[1].getBlue());
+
+		final int b = (int) (interval * 0.0F + interval) - 1;
+		fi.reds[b] = ((byte) gc[1].getRed());
+		fi.greens[b] = ((byte) gc[1].getGreen());
+		fi.blues[b] = ((byte) gc[1].getBlue());
 		nColorsfl = size;
-		if (nColorsfl > 0) {
+		if (nColorsfl > 0.0F) {
 			if (nColorsfl < size) interpolate(size, fi.reds, fi.greens, fi.blues,
 				(int) nColorsfl);
 			showLut(imp, channel, fi, true);
 			return;
 		}
 	}
-
-	/*
-	 * interpolate, modified from the ImageJ method by Wayne Rasband.
-	 */
 
 	private static void interpolate(final int size, final byte[] reds,
 		final byte[] greens, final byte[] blues, final int nColors)
@@ -181,45 +171,42 @@ public class ReaderToolkit {
 		System.arraycopy(reds, 0, r, 0, nColors);
 		System.arraycopy(greens, 0, g, 0, nColors);
 		System.arraycopy(blues, 0, b, 0, nColors);
-		final double scale = nColors / (float) size;
-		int i1, i2;
-		double fraction;
+		final double scale = nColors / size;
+
 		for (int i = 0; i < size; i++) {
-			i1 = (int) (i * scale);
-			i2 = i1 + 1;
+			final int i1 = (int) (i * scale);
+			int i2 = i1 + 1;
 			if (i2 == nColors) i2 = nColors - 1;
-			fraction = i * scale - i1;
+			final double fraction = i * scale - i1;
 			reds[i] =
-				(byte) ((1.0 - fraction) * (r[i1] & 255) + fraction * (r[i2] & 255));
+				((byte) (int) ((1.0D - fraction) * (r[i1] & 0xFF) + fraction *
+					(r[i2] & 0xFF)));
 			greens[i] =
-				(byte) ((1.0 - fraction) * (g[i1] & 255) + fraction * (g[i2] & 255));
+				((byte) (int) ((1.0D - fraction) * (g[i1] & 0xFF) + fraction *
+					(g[i2] & 0xFF)));
 			blues[i] =
-				(byte) ((1.0 - fraction) * (b[i1] & 255) + fraction * (b[i2] & 255));
+				((byte) (int) ((1.0D - fraction) * (b[i1] & 0xFF) + fraction *
+					(b[i2] & 0xFF)));
 		}
 	}
-
-	/*
-	 * showLut, applies the new Lut on the actual image
-	 */
 
 	public static void showLut(final ImagePlus imp, final int channel,
 		final FileInfo fi, final boolean showImage)
 	{
-		if (imp != null) {
-			if (imp.getType() == ImagePlus.COLOR_RGB) IJ
-				.error("Color tables cannot be assiged to RGB Images.");
+		if (imp != null) if (imp.getType() == 4) {
+			IJ.error("Color tables cannot be assiged to RGB Images.");
+		}
+		else {
+			IndexColorModel cm = null;
+			cm = new IndexColorModel(8, 256, fi.reds, fi.greens, fi.blues);
+			imp.setPosition(channel + 1, imp.getSlice(), imp.getFrame());
+			if (imp.isComposite()) {
+				((CompositeImage) imp).setChannelColorModel(cm);
+				((CompositeImage) imp).updateChannelAndDraw();
+			}
 			else {
-				IndexColorModel cm = null;
-				cm = new IndexColorModel(8, 256, fi.reds, fi.greens, fi.blues);
-				imp.setPosition(channel + 1, imp.getSlice(), imp.getFrame());
-				if (imp.isComposite()) {
-					((CompositeImage) imp).setChannelColorModel(cm);
-					((CompositeImage) imp).updateChannelAndDraw();
-				}
-				else {
-					imp.getProcessor().setColorModel(cm);
-					imp.updateAndDraw();
-				}
+				imp.getProcessor().setColorModel(cm);
+				imp.updateAndDraw();
 			}
 		}
 	}

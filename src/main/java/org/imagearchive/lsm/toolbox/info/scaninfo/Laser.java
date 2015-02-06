@@ -5,24 +5,24 @@ import java.util.LinkedHashMap;
 
 public class Laser {
 
-	public LinkedHashMap<String, Object> records =
-		new LinkedHashMap<String, Object>();
+	public LinkedHashMap<String, Object> records = new LinkedHashMap();
 
 	public Object[][] data = {
-		{ new Long(0x050000001), DataType.STRING, "LASER_NAME" },
-		{ new Long(0x050000002), DataType.LONG, "LASER_ACQUIRE" },
-		{ new Long(0x050000003), DataType.DOUBLE, "LASER_POWER" } }; // in the
-																																	// description
-																																	// it's a Long
+		{ new Long(1342177281L), DataType.STRING, "LASER_NAME" },
+		{ new Long(1342177282L), DataType.LONG, "LASER_ACQUIRE" },
+		{ new Long(1342177283L), DataType.DOUBLE, "LASER_POWER" } };
 
-	public static boolean isLasers(final long tagEntry) {// 805306368
-		if (tagEntry == 0x030000000) return true;
-		else return false;
+	public static boolean isLasers(final long tagEntry) {
+		if (tagEntry == 805306368L) {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isLaser(final long tagEntry) {
-		if (tagEntry == 0x050000000) return true;
-		else return false;
+		if (tagEntry == 1342177280L) {
+			return true;
+		}
+		return false;
 	}
-
 }

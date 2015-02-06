@@ -6,7 +6,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class InfoNode extends DefaultMutableTreeNode {
 
 	public Object data;
-
 	public String title;
 
 	public InfoNode(final String title, final Object data) {
@@ -17,6 +16,6 @@ public class InfoNode extends DefaultMutableTreeNode {
 
 	@Override
 	public String toString() {
-		return title;
+		return this.title;
 	}
 }

@@ -21,7 +21,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
 
 import org.imagearchive.lsm.reader.info.ImageDirectory;
 import org.imagearchive.lsm.reader.info.LSMFileInfo;
@@ -31,29 +30,18 @@ import org.imagearchive.lsm.toolbox.info.CZLSMInfoExtended;
 public class SelectImageDialog extends JDialog {
 
 	private JPanel panel;
-
 	private JList imageList;
-
 	private final MasterModel masterModel = MasterModel.getMasterModel();
-
 	private Vector<ListBoxImage> fileInfos;
-
 	private Vector<String> images;
-
 	private String label = "Please select:";
-
 	private JButton okButton;
-
 	private JButton cancelButton;
-
 	private int returnVal = -1;
 
 	private int[] values = null;
-
 	public static final int OK_OPTION = 0;
-
 	public static final int CANCEL_OPTION = 2;
-
 	private boolean channel = false;
 
 	public SelectImageDialog(final JFrame parent, final String label,
@@ -77,124 +65,126 @@ public class SelectImageDialog extends JDialog {
 	}
 
 	private void initiliazeGUI() {
-		panel = new JPanel();
-		imageList = new JList();
-		okButton =
+		this.panel = new JPanel();
+		this.imageList = new JList();
+		this.okButton =
 			new JButton("OK", new ImageIcon(getClass().getResource("images/ok.png")));
-		cancelButton =
+		this.cancelButton =
 			new JButton("Cancel", new ImageIcon(getClass().getResource(
 				"images/cancel.png")));
-		panel.setLayout(new GridBagLayout());
+		this.panel.setLayout(new GridBagLayout());
 		final GridBagConstraints constraints = new GridBagConstraints();
 		setSize(new Dimension(200, 300));
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.gridwidth = 2;
 		constraints.gridheight = 1;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.fill = 2;
 
 		constraints.ipadx = 0;
 		constraints.ipady = 10;
-		constraints.weightx = 0.25;
-		constraints.weighty = 0.25;
-		panel.add(new JLabel(label), constraints);
+		constraints.weightx = 0.25D;
+		constraints.weighty = 0.25D;
+		this.panel.add(new JLabel(this.label), constraints);
 		constraints.gridy = 1;
 		constraints.ipadx = 0;
 		constraints.ipady = 0;
-		constraints.weightx = 1;
-		constraints.weighty = 1;
-		constraints.fill = GridBagConstraints.BOTH;
-		panel.add(imageList, constraints);
+		constraints.weightx = 1.0D;
+		constraints.weighty = 1.0D;
+		constraints.fill = 1;
+		this.panel.add(this.imageList, constraints);
 		constraints.gridy = 3;
 		constraints.gridwidth = 1;
 		constraints.ipadx = 0;
 		constraints.ipady = 10;
-		constraints.weightx = 0.25;
-		constraints.weighty = 0.25;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		panel.add(okButton, constraints);
+		constraints.weightx = 0.25D;
+		constraints.weighty = 0.25D;
+		constraints.fill = 2;
+		this.panel.add(this.okButton, constraints);
 		constraints.gridx = 1;
-		panel.add(cancelButton, constraints);
-		this.getContentPane().add(panel);
+		this.panel.add(this.cancelButton, constraints);
+		getContentPane().add(this.panel);
 		setTitle("Select...");
-		if (channel) imageList
-			.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		else imageList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		if (this.channel) this.imageList.setSelectionMode(2);
+		else this.imageList.setSelectionMode(0);
 		setListeners();
 		centerWindow();
 	}
 
 	private void fillList(final byte filter) {
 		final int[] imagesIDs = WindowManager.getIDList();
-		images = new Vector<String>();
-		fileInfos = new Vector<ListBoxImage>();
+		this.images = new Vector();
+		this.fileInfos = new Vector();
 		if (imagesIDs == null) return;
 		for (int i = 0; i < imagesIDs.length; i++) {
 			if (WindowManager.getImage(imagesIDs[i]) != null) {
 				final FileInfo fi =
 					WindowManager.getImage(imagesIDs[i]).getOriginalFileInfo();
 				boolean add = false;
-				if (fi != null && fi instanceof LSMFileInfo) {
+				if ((fi != null) && ((fi instanceof LSMFileInfo))) {
 					final LSMFileInfo lsm = (LSMFileInfo) fi;
 					final CZLSMInfoExtended cz =
 						(CZLSMInfoExtended) ((ImageDirectory) lsm.imageDirectories.get(0)).TIF_CZ_LSMINFO;
-					if (filter == MasterModel.TIME) if (cz.DimensionTime > 1) add = true;
-					if (filter == MasterModel.DEPTH) if (cz.DimensionZ > 1) {
-						add = true;
-					}
-					if (filter == MasterModel.CHANNEL) if ((cz.SpectralScan == 1 && cz.channelWavelength != null) &&
-						cz.channelWavelength.Channels >= 1) add = true;
+					if ((filter == MasterModel.TIME) && (cz.DimensionTime > 1L)) add =
+						true;
+					if ((filter == MasterModel.DEPTH) && (cz.DimensionZ > 1L)) add = true;
+					if ((filter == MasterModel.CHANNEL) && (cz.SpectralScan == 1) &&
+						(cz.channelWavelength != null) &&
+						(cz.channelWavelength.Channels >= 1L)) add = true;
 					if (filter == MasterModel.NONE) add = true;
 					if (add) {
-						images.add(lsm.fileName);
-						fileInfos.add(new ListBoxImage(lsm.fileName, lsm, imagesIDs[i]));
+						this.images.add(lsm.fileName);
+						this.fileInfos
+							.add(new ListBoxImage(lsm.fileName, lsm, imagesIDs[i]));
 					}
 				}
 			}
 		}
-		final ComboBoxModel cbm = new DefaultComboBoxModel(images);
-		imageList.setModel(cbm);
+		final ComboBoxModel cbm = new DefaultComboBoxModel(this.images);
+		this.imageList.setModel(cbm);
 	}
 
 	private void setListeners() {
-		okButton.addActionListener(new ActionListener() {
+		this.okButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				if (imageList.getModel().getSize() == 0) return;
-				final int[] selectedIndices = imageList.getSelectedIndices();
-				values = new int[selectedIndices.length];
+				if (SelectImageDialog.this.imageList.getModel().getSize() == 0) return;
+				final int[] selectedIndices =
+					SelectImageDialog.this.imageList.getSelectedIndices();
+				SelectImageDialog.this.values = new int[selectedIndices.length];
 				for (int i = 0; i < selectedIndices.length; i++) {
-					final ListBoxImage im = fileInfos.get(selectedIndices[i]);
-					values[i] = im.imageIndex;
+					final ListBoxImage im =
+						SelectImageDialog.this.fileInfos.get(selectedIndices[i]);
+					SelectImageDialog.this.values[i] = im.imageIndex;
 				}
-				returnVal = OK_OPTION;
-				setVisible(false);
+				SelectImageDialog.this.returnVal = 0;
+				SelectImageDialog.this.setVisible(false);
 			}
 		});
-		cancelButton.addActionListener(new ActionListener() {
+		this.cancelButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				returnVal = CANCEL_OPTION;
-				setVisible(false);
+				SelectImageDialog.this.returnVal = 2;
+				SelectImageDialog.this.setVisible(false);
 			}
 		});
 	}
 
 	public int showDialog() {
-		this.setVisible(true);
-		this.dispose();
-		return returnVal;
+		setVisible(true);
+		dispose();
+		return this.returnVal;
 	}
 
 	public int[] getSelected() {
-		return values;
+		return this.values;
 	}
 
 	public void centerWindow() {
 		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((screenSize.width - this.getWidth()) / 2,
-			(screenSize.height - this.getHeight()) / 2);
+		setLocation((screenSize.width - getWidth()) / 2,
+			(screenSize.height - getHeight()) / 2);
 	}
 }

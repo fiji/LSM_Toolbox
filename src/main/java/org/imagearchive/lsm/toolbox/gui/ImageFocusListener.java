@@ -8,8 +8,6 @@ import org.imagearchive.lsm.toolbox.ServiceMediator;
 
 public class ImageFocusListener implements WindowFocusListener {
 
-	public ImageFocusListener() {}
-
 	@Override
 	public void windowGainedFocus(final WindowEvent e) {
 		final DetailsFrame details = ServiceMediator.getDetailsFrame();

@@ -5,7 +5,6 @@ import ij.IJ;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -33,46 +32,28 @@ import org.imagearchive.lsm.toolbox.MasterModel;
 public class BatchDialog extends JDialog {
 
 	private JButton okButton;
-
 	private JButton cancelButton;
-
 	private final MasterModel masterModel;
-
 	private final String title = "Zeiss LSM batch conversion";
-
 	private JPanel buttonsPanel;
-
 	private JPanel mainPanel;
-
 	private JLabel sourceLabel;
-
 	private JLabel outputLabel;
-
 	private JLabel formatLabel;
-
 	private JTable sourceTable;
-
 	private JScrollPane sourcePane;
-
 	private JTextField outputTF;
-
 	private JButton sourceButton;
-
 	private JButton outputButton;
-
 	private JButton resetButton;
-
 	private JComboBox formatCombo;
-
 	private JCheckBox verboseCB;
-
 	private JCheckBox dirCB;
-
 	private final JFrame parent;
 
 	public BatchDialog(final Object parent, final MasterModel masterModel) {
 		super((JFrame) parent, true);
-		this.parent = (JFrame) parent;
+		this.parent = ((JFrame) parent);
 		this.masterModel = masterModel;
 		initComponents();
 		setGUI();
@@ -81,185 +62,182 @@ public class BatchDialog extends JDialog {
 	}
 
 	public void initComponents() {
-		okButton =
+		this.okButton =
 			new JButton("Run batch", new ImageIcon(getClass().getResource(
 				"images/ok.png")));
-		cancelButton =
+		this.cancelButton =
 			new JButton("Cancel", new ImageIcon(getClass().getResource(
 				"images/cancel.png")));
-		sourceLabel = new JLabel("Select source folder");
-		outputLabel = new JLabel("Select output folder");
-		sourceTable = new JTable();
-		sourcePane = new JScrollPane();
-		outputTF = new JTextField();
-		sourceButton = new JButton("Browse");
-		outputButton = new JButton("Browse");
-		resetButton = new JButton("Reset list");
-		formatLabel = new JLabel("Save as type:");
-		formatCombo = new JComboBox(masterModel.supportedBatchTypes);
-		verboseCB = new JCheckBox("Verbose (popups on error!)");
-		dirCB = new JCheckBox("Output each image to separate directory");
-		buttonsPanel = new JPanel();
-		mainPanel = new JPanel();
-		// sourceTableModel = new DefaultTableModel();
+		this.sourceLabel = new JLabel("Select source folder");
+		this.outputLabel = new JLabel("Select output folder");
+		this.sourceTable = new JTable();
+		this.sourcePane = new JScrollPane();
+		this.outputTF = new JTextField();
+		this.sourceButton = new JButton("Browse");
+		this.outputButton = new JButton("Browse");
+		this.resetButton = new JButton("Reset list");
+		this.formatLabel = new JLabel("Save as type:");
+		this.formatCombo = new JComboBox(this.masterModel.supportedBatchTypes);
+		this.verboseCB = new JCheckBox("Verbose (popups on error!)");
+		this.dirCB = new JCheckBox("Output each image to separate directory");
+		this.buttonsPanel = new JPanel();
+		this.mainPanel = new JPanel();
 	}
 
 	public void setGUI() {
 		getContentPane().setLayout(new BorderLayout());
 
-		mainPanel.setLayout(new GridBagLayout());
+		this.mainPanel.setLayout(new GridBagLayout());
 
-		sourcePane.setViewportView(sourceTable);
+		this.sourcePane.setViewportView(this.sourceTable);
 
-		mainPanel =
-			(JPanel) GUIMaker.addComponentToGrid(sourceLabel, mainPanel, 0, 0, 1, 1,
-				GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH, 0.125d, 1d);
+		this.mainPanel =
+			((JPanel) GUIMaker.addComponentToGrid(this.sourceLabel, this.mainPanel,
+				0, 0, 1, 1, 2, 11, 0.125D, 1.0D));
 
-		sourcePane.setMinimumSize(new Dimension(400, 200));
+		this.sourcePane.setMinimumSize(new Dimension(400, 200));
 
-		mainPanel =
-			(JPanel) GUIMaker.addComponentToGrid(sourcePane, mainPanel, 1, 0, 1, 4,
-				GridBagConstraints.BOTH, GridBagConstraints.CENTER, 1d, 1d);
+		this.mainPanel =
+			((JPanel) GUIMaker.addComponentToGrid(this.sourcePane, this.mainPanel, 1,
+				0, 1, 4, 1, 10, 1.0D, 1.0D));
 
-		mainPanel =
-			(JPanel) GUIMaker.addComponentToGrid(sourceButton, mainPanel, 2, 0, 1, 1,
-				GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH, 0.125d, 0.5d);
+		this.mainPanel =
+			((JPanel) GUIMaker.addComponentToGrid(this.sourceButton, this.mainPanel,
+				2, 0, 1, 1, 2, 11, 0.125D, 0.5D));
 
-		mainPanel =
-			(JPanel) GUIMaker.addComponentToGrid(outputLabel, mainPanel, 0, 5, 1, 1,
-				GridBagConstraints.BOTH, GridBagConstraints.CENTER, 0.125d, 1d);
+		this.mainPanel =
+			((JPanel) GUIMaker.addComponentToGrid(this.outputLabel, this.mainPanel,
+				0, 5, 1, 1, 1, 10, 0.125D, 1.0D));
 
-		mainPanel =
-			(JPanel) GUIMaker.addComponentToGrid(outputTF, mainPanel, 1, 5, 1, 1,
-				GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER, 0.125d, 1d);
+		this.mainPanel =
+			((JPanel) GUIMaker.addComponentToGrid(this.outputTF, this.mainPanel, 1,
+				5, 1, 1, 2, 10, 0.125D, 1.0D));
 
-		mainPanel =
-			(JPanel) GUIMaker.addComponentToGrid(outputButton, mainPanel, 2, 5, 1, 1,
-				GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER, 0.125d, 0.5d);
+		this.mainPanel =
+			((JPanel) GUIMaker.addComponentToGrid(this.outputButton, this.mainPanel,
+				2, 5, 1, 1, 2, 10, 0.125D, 0.5D));
 
-		mainPanel =
-			(JPanel) GUIMaker.addComponentToGrid(formatLabel, mainPanel, 0, 6, 1, 1,
-				GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER, 0.125d, 0.5d);
+		this.mainPanel =
+			((JPanel) GUIMaker.addComponentToGrid(this.formatLabel, this.mainPanel,
+				0, 6, 1, 1, 2, 10, 0.125D, 0.5D));
 
-		mainPanel =
-			(JPanel) GUIMaker.addComponentToGrid(formatCombo, mainPanel, 1, 6, 1, 1,
-				GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER, 0.125d, 0.5d);
+		this.mainPanel =
+			((JPanel) GUIMaker.addComponentToGrid(this.formatCombo, this.mainPanel,
+				1, 6, 1, 1, 2, 10, 0.125D, 0.5D));
 
-		mainPanel =
-			(JPanel) GUIMaker.addComponentToGrid(dirCB, mainPanel, 0, 7, 3, 1,
-				GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER, 0.125d, 0.5d);
+		this.mainPanel =
+			((JPanel) GUIMaker.addComponentToGrid(this.dirCB, this.mainPanel, 0, 7,
+				3, 1, 2, 10, 0.125D, 0.5D));
 
-		mainPanel =
-			(JPanel) GUIMaker.addComponentToGrid(verboseCB, mainPanel, 0, 8, 3, 1,
-				GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER, 0.125d, 0.5d);
+		this.mainPanel =
+			((JPanel) GUIMaker.addComponentToGrid(this.verboseCB, this.mainPanel, 0,
+				8, 3, 1, 2, 10, 0.125D, 0.5D));
 
-		buttonsPanel.add(resetButton);
-		buttonsPanel.add(okButton);
-		buttonsPanel.add(cancelButton);
-		verboseCB.setSelected(true);
-		getContentPane().add(mainPanel, BorderLayout.CENTER);
-		getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
+		this.buttonsPanel.add(this.resetButton);
+		this.buttonsPanel.add(this.okButton);
+		this.buttonsPanel.add(this.cancelButton);
+		this.verboseCB.setSelected(true);
+		getContentPane().add(this.mainPanel, "Center");
+		getContentPane().add(this.buttonsPanel, "South");
 		pack();
-		setTitle(title);
+		setTitle(this.title);
 	}
 
 	public void setListeners() {
-		okButton.addActionListener(new ActionListener() {
+		this.okButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				final File outputDir = new File(outputTF.getText());
-				if (!(sourceTable.getModel().getRowCount() > 0)) {
+				final File outputDir = new File(BatchDialog.this.outputTF.getText());
+				if (BatchDialog.this.sourceTable.getModel().getRowCount() <= 0) {
 					IJ.error("You have to select some files or a directory containing images first!");
 					return;
 				}
 				final ArrayList list =
-					((LsmImageTableModel) sourceTable.getModel()).getFiles();
-				if (outputTF.getText() != "" |
-					(outputDir.isDirectory() | outputDir.exists()))
-				{
-					if (!outputDir.exists()) {
-						final int result =
-							JOptionPane
-								.showConfirmDialog(
-									new JFrame(),
-									"The output directory does not exist. Do you want to create it and continue the processing?",
-									"Create directory", JOptionPane.YES_NO_OPTION);
-						if (result == JOptionPane.YES_OPTION) if (outputDir.mkdirs()) doConvert(
-							list, outputDir);
-					}
-					else {
-						doConvert(list, outputDir);
-					}
+					((LsmImageTableModel) BatchDialog.this.sourceTable.getModel())
+						.getFiles();
+				if ((BatchDialog.this.outputTF.getText() != "" | (outputDir
+					.isDirectory() | outputDir.exists()))) if (!outputDir.exists()) {
+					final int result =
+						JOptionPane
+							.showConfirmDialog(
+								new JFrame(),
+								"The output directory does not exist. Do you want to create it and continue the processing?",
+								"Create directory", 0);
+					if ((result == 0) && (outputDir.mkdirs())) BatchDialog.this
+						.doConvert(list, outputDir);
 				}
+				else {
+					BatchDialog.this.doConvert(list, outputDir);
+				}
+
 			}
 		});
-
-		cancelButton.addActionListener(new ActionListener() {
+		this.cancelButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				dispose();
+				BatchDialog.this.dispose();
 			}
 		});
-		sourceButton.addActionListener(new ActionListener() {
+		this.sourceButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				final JFileChooser fc = new JFileChooser();
-				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				fc.setFileSelectionMode(2);
 				fc.setMultiSelectionEnabled(true);
 				fc.setDialogTitle("Select a source directory or multiselect files");
 				fc.addChoosableFileFilter(new ImageFilter());
 				final int returnVal = fc.showDialog(null, "Select source");
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
+				if (returnVal == 0) {
 					final File[] files = fc.getSelectedFiles();
 					final LsmImageTableModel tm = new LsmImageTableModel();
 					for (int i = 0; i < files.length; i++) {
-						processPath(tm, files[i]);
+						BatchDialog.this.processPath(tm, files[i]);
 					}
-					sourceTable.setModel(tm);
+					BatchDialog.this.sourceTable.setModel(tm);
 				}
 			}
 		});
-		outputButton.addActionListener(new ActionListener() {
+		this.outputButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				final JFileChooser fc = new JFileChooser();
 				fc.setDialogTitle("Select a output directory");
-				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fc.setFileSelectionMode(1);
 				fc.setAcceptAllFileFilterUsed(false);
 				final int returnVal = fc.showDialog(null, "Select target directory");
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
+				if (returnVal == 0) {
 					final File file = fc.getSelectedFile();
-					outputTF.setText(file.getAbsolutePath());
+					BatchDialog.this.outputTF.setText(file.getAbsolutePath());
 				}
 			}
 		});
-		resetButton.addActionListener(new ActionListener() {
+		this.resetButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				((LsmImageTableModel) sourceTable.getModel()).removeAllFiles();
+				((LsmImageTableModel) BatchDialog.this.sourceTable.getModel())
+					.removeAllFiles();
 			}
 		});
-
 	}
 
 	public void doConvert(final ArrayList list, final File outputDir) {
-		final BatchConverter converter = new BatchConverter(masterModel);
+		final BatchConverter converter = new BatchConverter(this.masterModel);
 		IJ.showStatus("Conversion started");
 		for (int i = 0; i < list.size(); i++) {
 			IJ.showStatus("Converting " + i + "/" + list.size());
 			converter.convertFile(((File) list.get(i)).getAbsolutePath(), outputDir
-				.getAbsolutePath(), (String) formatCombo.getSelectedItem(), verboseCB
-				.isSelected(), dirCB.isSelected());
+				.getAbsolutePath(), (String) this.formatCombo.getSelectedItem(),
+				this.verboseCB.isSelected(), this.dirCB.isSelected());
 		}
-		IJ.showProgress(1.0);
+		IJ.showProgress(1.0D);
 		IJ.showStatus("Conversion done");
 		IJ.showMessage("Conversion done");
-		this.dispose();
+		dispose();
 	}
 
 	public LsmImageTableModel processPath(LsmImageTableModel tm, final File path)
@@ -270,11 +248,10 @@ public class BatchDialog extends JDialog {
 				tm = processPath(tm, new File(path, children[i]));
 			}
 		}
-		else {
-			if (ImageFilter.getExtension(path).equals("lsm")) tm.addFile(path);
+		else if (ImageFilter.getExtension(path).equals("lsm")) {
+			tm.addFile(path);
 		}
 		return tm;
-
 	}
 
 	public void centerWindow() {

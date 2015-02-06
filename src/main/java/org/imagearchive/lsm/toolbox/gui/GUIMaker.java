@@ -24,5 +24,4 @@ public class GUIMaker {
 		container.add(component, constraints);
 		return container;
 	}
-
 }

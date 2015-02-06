@@ -10,9 +10,7 @@ public class ListBoxImage {
 	public String fileName = "";
 
 	public String masses = "";
-
 	public int imageIndex;
-
 	public LSMFileInfo lsmFi;
 
 	public ListBoxImage(final String title, final LSMFileInfo lsmFi,
@@ -25,6 +23,6 @@ public class ListBoxImage {
 
 	@Override
 	public String toString() {
-		return title;
+		return this.title;
 	}
 }
