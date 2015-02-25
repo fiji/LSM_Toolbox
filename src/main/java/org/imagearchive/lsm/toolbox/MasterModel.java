@@ -18,7 +18,13 @@ public class MasterModel {
 
 	private static MasterModel masterModel;
 
-	public static final String VERSION = "4.0g";
+	public static final String VERSION = version();
+
+	private static String version() {
+		final String version =
+			MasterModel.class.getPackage().getImplementationVersion();
+		return version == null ? "DEV" : version;
+	}
 
 	public static boolean debugMode = false;
 
