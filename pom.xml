@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>LSM_Toolbox</artifactId>
-	<version>4.0i-SNAPSHOT</version>
+	<version>4.1.0</version>
 
 	<name>plugins/LSM_Toolbox.jar</name>
 	<description />
@@ -65,4 +65,8 @@
 			<url>http://maven.imagej.net/content/groups/public</url>
 		</repository>
 	</repositories>
+
+  <scm>
+    <tag>LSM_Toolbox-4.1.0</tag>
+  </scm>
 </project>
