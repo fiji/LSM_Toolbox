@@ -21,8 +21,11 @@ public class MasterModel {
 	public static final String VERSION = version();
 
 	private static String version() {
-		final String version =
-			MasterModel.class.getPackage().getImplementationVersion();
+		String version = null;
+		final Package lsmPackage = MasterModel.class.getPackage();
+		if (lsmPackage != null) {
+			version = lsmPackage.getImplementationVersion();
+		}
 		return version == null ? "DEV" : version;
 	}
 
