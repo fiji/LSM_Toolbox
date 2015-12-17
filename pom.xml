@@ -32,6 +32,21 @@
 		</developer>
 	</developers>
 
+	<scm>
+		<connection>scm:git:git://github.com/fiji/LSM_Toolbox</connection>
+		<developerConnection>scm:git:git@github.com:fiji/LSM_Toolbox</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/fiji/LSM_Toolbox</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/fiji/LSM_Toolbox/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>http://jenkins.imagej.net/job/LSM_Toolbox/</url>
+	</ciManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>net.imagej</groupId>
