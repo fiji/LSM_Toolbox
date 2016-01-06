@@ -47,6 +47,14 @@
 		<url>http://jenkins.imagej.net/job/LSM_Toolbox/</url>
 	</ciManagement>
 
+	<repositories>
+		<!-- NB: for project parent -->
+		<repository>
+			<id>imagej.public</id>
+			<url>http://maven.imagej.net/content/groups/public</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>net.imagej</groupId>
@@ -72,12 +80,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-		<!-- NB: for project parent -->
-		<repository>
-			<id>imagej.public</id>
-			<url>http://maven.imagej.net/content/groups/public</url>
-		</repository>
-	</repositories>
 </project>
