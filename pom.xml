@@ -99,6 +99,7 @@
 	</ciManagement>
 
 	<properties>
+		<main-class>org.imagearchive.lsm.toolbox.gui.AboutDialog</main-class>
 		<license.licenseName>gpl_v2</license.licenseName>
 		<license.copyrightOwners>Fiji developers.</license.copyrightOwners>
 		<license.projectName>Fiji distribution of ImageJ for the life sciences.</license.projectName>
@@ -121,19 +122,4 @@
 			<artifactId>LSM_Reader</artifactId>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>org.imagearchive.lsm.toolbox.gui.AboutDialog</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>
