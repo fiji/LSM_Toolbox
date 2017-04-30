@@ -10,7 +10,7 @@
 
 	<groupId>sc.fiji</groupId>
 	<artifactId>LSM_Toolbox</artifactId>
-	<version>4.1.2-SNAPSHOT</version>
+	<version>4.1.2</version>
 
 	<name>LSM Toolbox</name>
 	<description>LSM Toolbox plugin for Fiji.</description>
@@ -86,7 +86,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/fiji/LSM_Toolbox</connection>
 		<developerConnection>scm:git:git@github.com:fiji/LSM_Toolbox</developerConnection>
-		<tag>HEAD</tag>
+		<tag>LSM_Toolbox-4.1.2</tag>
 		<url>https://github.com/fiji/LSM_Toolbox</url>
 	</scm>
 	<issueManagement>
