@@ -10,7 +10,7 @@
 
 	<groupId>sc.fiji</groupId>
 	<artifactId>LSM_Toolbox</artifactId>
-	<version>4.1.2-SNAPSHOT</version>
+	<version>4.1.3-SNAPSHOT</version>
 
 	<name>LSM Toolbox</name>
 	<description>LSM Toolbox plugin for Fiji.</description>
