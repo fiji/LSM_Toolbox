@@ -14,7 +14,7 @@
 
 	<name>LSM Toolbox</name>
 	<description>LSM Toolbox plugin for Fiji.</description>
-	<url>http://imagej.net/LSM_Toolbox</url>
+	<url>https://imagej.net/LSM_Toolbox</url>
 	<inceptionYear>2002</inceptionYear>
 	<organization>
 		<name>Fiji</name>
@@ -32,7 +32,7 @@
 		<developer>
 			<id>tinevez</id>
 			<name>Jean-Yves Tinevez</name>
-			<url>http://imagej.net/User:JeanYvesTinevez</url>
+			<url>https://imagej.net/User:JeanYvesTinevez</url>
 			<roles>
 				<role>reviewer</role>
 				<role>support</role>
@@ -42,7 +42,7 @@
 		<developer>
 			<id>ctrueden</id>
 			<name>Curtis Rueden</name>
-			<url>http://imagej.net/User:Rueden</url>
+			<url>https://imagej.net/User:Rueden</url>
 			<roles>
 				<role>maintainer</role>
 			</roles>
@@ -55,23 +55,23 @@
 		</contributor>
 		<contributor>
 			<name>Jerome Mutterer</name>
-			<url>http://imagej.net/User:Mutterer</url>
+			<url>https://imagej.net/User:Mutterer</url>
 			<roles><role>founder</role></roles>
 			<properties><id>mutterer</id></properties>
 		</contributor>
 		<contributor>
 			<name>Johannes Schindelin</name>
-			<url>http://imagej.net/User:Schindelin</url>
+			<url>https://imagej.net/User:Schindelin</url>
 			<properties><id>dscho</id></properties>
 		</contributor>
 		<contributor>
 			<name>Mark Hiner</name>
-			<url>http://imagej.net/User:Hinerm</url>
+			<url>https://imagej.net/User:Hinerm</url>
 			<properties><id>hinerm</id></properties>
 		</contributor>
 		<contributor>
 			<name>Mark Longair</name>
-			<url>http://imagej.net/User:Mark</url>
+			<url>https://imagej.net/User:Mark</url>
 			<properties><id>mhl</id></properties>
 		</contributor>
 	</contributors>
@@ -111,7 +111,7 @@
 	<repositories>
 		<repository>
 			<id>imagej.public</id>
-			<url>http://maven.imagej.net/content/groups/public</url>
+			<url>https://maven.imagej.net/content/groups/public</url>
 		</repository>
 	</repositories>
 
