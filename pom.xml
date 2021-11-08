@@ -84,7 +84,7 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/fiji/LSM_Toolbox</connection>
+		<connection>scm:git:https://github.com/fiji/LSM_Toolbox</connection>
 		<developerConnection>scm:git:git@github.com:fiji/LSM_Toolbox</developerConnection>
 		<tag>HEAD</tag>
 		<url>https://github.com/fiji/LSM_Toolbox</url>
